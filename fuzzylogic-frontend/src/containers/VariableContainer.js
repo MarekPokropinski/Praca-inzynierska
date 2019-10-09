@@ -5,7 +5,8 @@ import {
   ListItemText,
   Breadcrumbs,
   Typography,
-  Fab
+  Fab,
+  Button
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
@@ -23,8 +24,13 @@ const styles = theme => ({
     position: 'absolute',
     bottom: theme.spacing(2),
     right: theme.spacing(3),
+  }, 
+  button:{
+    margin:theme.spacing(1)
   }
 });
+
+
 
 class MainContainer extends React.Component {
   constructor() {
@@ -41,9 +47,10 @@ class MainContainer extends React.Component {
           <Link className={classes.link} to="/variables">Variables</Link>
           <Typography color="textPrimary">Opady</Typography>
         </Breadcrumbs>
-        <Fab className={classes.fab} color='primary'>
+        {/* <Fab className={classes.fab} color='primary'>
           <AddIcon/>
-        </Fab>
+        </Fab> */}
+        <Button className={classes.button} variant="contained">Add value</Button>
       </div>
     );
   }
