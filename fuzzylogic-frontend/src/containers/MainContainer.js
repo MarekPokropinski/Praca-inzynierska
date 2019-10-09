@@ -7,7 +7,7 @@ import {
   FormControlLabel
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
-import { Router, Route } from "react-router-dom";
+import { Router, Route, Redirect } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import VariablesContainer from "./VariablesContainer";
 import VariableContainer from "./VariableContainer";
@@ -15,8 +15,7 @@ import VariableContainer from "./VariableContainer";
 const styles = theme => ({
   root: {
     display: "flex",
-    background: theme.palette.background.paper,
-    abc: console.log(theme)
+    background: theme.palette.background.paper
   },
   tabs_container: {
     background: theme.palette.background.default,
@@ -39,9 +38,9 @@ const styles = theme => ({
   },
   tab: {
     color: theme.palette.text.primary
-  }, 
+  },
   switch: {
-    margin: '0 auto 0 auto', 
+    margin: "0 auto 0 auto",
     color: theme.palette.text.primary
   }
 });
@@ -60,6 +59,7 @@ class MainContainer extends React.Component {
       selectedTab: 1
     };
     this.history = createBrowserHistory();
+    this.history.listen(history => console.log(history));
   }
 
   render() {
@@ -73,11 +73,11 @@ class MainContainer extends React.Component {
             orientation="vertical"
             value={selectedTab}
             onChange={(_event, newValue) => {
-              // this.setState({ selectedTab: newValue });
-              const routes = ["variables", "rules"];
+              const routes = ["/variables/", "/rules/"];
               const route = routes[newValue - 1];
-              console.log(this);
-              this.history.replace(route);
+              this.history.push({pathname:route})
+              // this.history.replace(route);
+              // console.log({...this.history.location})
             }}
           >
             <Tab
@@ -89,21 +89,27 @@ class MainContainer extends React.Component {
             />
             <Tab className={classes.tab} label="Variables" {...a11yProps(0)} />
             <Tab className={classes.tab} label="Rules" {...a11yProps(1)} />
-            <Tab
-              className={classes.tab}
-              label="dark"
-              onClick={() => setPalette("dark")}
-              {...a11yProps(4)}
-            />
           </Tabs>
           <FormGroup row>
-            <FormControlLabel className={classes.switch} label="darkmode" control={<Switch checked={palette==='dark'} onChange={()=>setPalette(palette==='dark'?'light':'dark')} />} />
+            <FormControlLabel
+              className={classes.switch}
+              label="darkmode"
+              control={
+                <Switch
+                  checked={palette === "dark"}
+                  onChange={() =>
+                    setPalette(palette === "dark" ? "light" : "dark")
+                  }
+                />
+              }
+            />
           </FormGroup>
         </div>
         <div className={classes.tabpanel}>
           <Router history={this.history}>
             <Route exact path="/variables/:id" component={VariableContainer} />
-            <Route exact path="/variables" component={VariablesContainer} />
+            <Route exact path="/variables/" component={VariablesContainer} />
+            <Redirect from="/" to="/variables/" />
           </Router>
         </div>
       </div>

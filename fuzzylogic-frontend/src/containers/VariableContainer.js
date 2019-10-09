@@ -11,6 +11,9 @@ import {
 import { withStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 import AddIcon from '@material-ui/icons/Add';
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import * as actionCreators from "../actions/variableActions";
 
 const styles = theme => ({
   root: {
@@ -33,19 +36,21 @@ const styles = theme => ({
 
 
 class MainContainer extends React.Component {
-  constructor() {
-    super();
-    this.state = {};
+  componentDidMount() {
+    this.props.fetchVariableDetails(this.props.match.params.id)
   }
 
 
   render() {
-    const { classes } = this.props;
+    const { classes, variable } = this.props;
+    if(!variable){
+      return null
+    }
     return (
       <div className={classes.root}>
         <Breadcrumbs>
-          <Link className={classes.link} to="/variables">Variables</Link>
-          <Typography color="textPrimary">Opady</Typography>
+          <Link className={classes.link} to="/variables/">Variables</Link>
+          <Typography color="textPrimary">{variable.name}</Typography>
         </Breadcrumbs>
         {/* <Fab className={classes.fab} color='primary'>
           <AddIcon/>
@@ -55,4 +60,14 @@ class MainContainer extends React.Component {
     );
   }
 }
-export default withStyles(styles)(MainContainer);
+
+const mapStateToProps = state => {
+  return {
+    variable: state.variable
+  };
+};
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(actionCreators, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(MainContainer));

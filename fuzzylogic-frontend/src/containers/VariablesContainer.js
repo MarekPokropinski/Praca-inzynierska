@@ -1,58 +1,106 @@
 import React from "react";
 import { List, ListItem, ListItemText, Fab } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
-import AddIcon from '@material-ui/icons/Add';
+import AddIcon from "@material-ui/icons/Add";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import AddVariableDialog from "../components/AddVariableDialog";
+import * as actionCreators from "../actions/variablesActions";
 
-const styles = theme=> ({
-  root:{width:"100%"},
+const styles = theme => ({
+  root: { width: "100%" },
   list: {
-    width:"100%"
-  }, 
+    width: "100%",
+    padding : "5px"
+  },
+  listItem: {
+    border: "2px solid " + theme.palette.primary.light,
+    borderRadius: "5px"
+  },
   text: {
     color: theme.palette.text.primary
   },
   fab: {
-    position: 'absolute',
+    position: "absolute",
     bottom: theme.spacing(2),
-    right: theme.spacing(3),
+    right: theme.spacing(3)
   }
 });
 
-let variablesMock = [{ id: 1, name: "Opady", values: ["małe, duże"] }];
-
-for(let i=0;i<3;i++){
-    variablesMock.push(variablesMock[0])
-}
-
 class MainContainer extends React.Component {
-  constructor() {
-    super();
-    this.state = {};
+  constructor(){
+    super()
+    this.handleAddVariable =this.handleAddVariable.bind(this)
+  }
+
+  componentDidMount() {
+    this.props.fetchVariables();
+  }
+
+  handleAddVariable(name){
+    this.props.createVariable(name).then(()=>{
+      console.log(name)
+      this.props.displayDialog(false)
+    })
   }
 
   render() {
-    const {classes} = this.props
+    const { classes, variables } = this.props;
+    if (!variables) {
+      return null;
+    }
     return (
       <div className={classes.root}>
         <List className={classes.list} component="nav">
-          {variablesMock.map((variable, key) => (
-            <ListItem button key = {key} onClick={()=>this.props.history.push(`${this.props.location.pathname}/${variable.id}`)}>
+          {variables.map((variable, key) => (
+            <ListItem
+              className={classes.listItem}
+              button
+              key={key}
+              onClick={() =>
+                this.props.history.push(`${variable.id}/`)
+              }
+            >
               <ListItemText
                 className={classes.text}
                 primary={variable.name}
-                secondary={"Values: "+variable.values
-                  .reduce(
-                    (prev, current) => prev + ", " + current
-                  )}
+                secondary={
+                  variable.values.length === 0
+                    ? ""
+                    : "Values: " +
+                      variable.values.reduce(
+                        (prev, current) => prev + ", " + current
+                      )
+                }
               />
             </ListItem>
           ))}
         </List>
-        <Fab className={classes.fab} color='primary'>
-          <AddIcon/>
+        <Fab
+          className={classes.fab}
+          color="primary"
+          onClick={() => this.props.displayDialog(true)}
+        >
+          <AddIcon />
         </Fab>
+        <AddVariableDialog
+          open={this.props.isDialogOpen}
+          onClose={() => this.props.displayDialog(false)}
+          onSubmit={this.handleAddVariable}
+        />
       </div>
     );
   }
 }
-export default withStyles(styles)(MainContainer);
+
+const mapStateToProps = state => {
+  return state.variables;
+};
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(actionCreators, dispatch);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(MainContainer));
