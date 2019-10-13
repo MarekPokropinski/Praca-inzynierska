@@ -10,7 +10,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { Router, Route, Redirect } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import VariablesContainer from "./VariablesContainer";
-import VariableContainer from "./VariableContainer";
+import VariableContainer from "./VariableDetailsContainer";
 
 const styles = theme => ({
   root: {

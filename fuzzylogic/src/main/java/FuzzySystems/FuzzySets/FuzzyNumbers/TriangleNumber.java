@@ -4,8 +4,10 @@ import FuzzySystems.FuzzySets.MembershipFunctions.FunctionFragment;
 import FuzzySystems.FuzzySets.MembershipFunctions.LinearFragment;
 import FuzzySystems.FuzzySets.MembershipFunctions.MembershipFunction;
 
+import javax.persistence.Entity;
 import java.util.ArrayList;
 
+@Entity
 public class TriangleNumber extends FuzzyNumber {
     private static MembershipFunction buildMembershipFunction(float start, float middle, float end){
         ArrayList<FunctionFragment> fragments = new ArrayList<FunctionFragment>();

@@ -10,7 +10,7 @@ public class LinguisticVariable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String name;
-    @OneToMany
+    @OneToMany(mappedBy = "linguisticVariable", cascade = CascadeType.ALL)
     private List<LinguisticValue> values;
 
     public LinguisticVariable(){

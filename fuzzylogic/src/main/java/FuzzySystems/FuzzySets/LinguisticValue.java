@@ -13,12 +13,23 @@ public class LinguisticValue {
     @OneToOne
     private FuzzyNumber number;
 
+    @ManyToOne
+    @JoinColumn
+    private LinguisticVariable linguisticVariable;
+
     public LinguisticValue() {}
+
+    public LinguisticValue(String name, LinguisticVariable linguisticVariable) {
+        this.name = name;
+        this.linguisticVariable = linguisticVariable;
+    }
 
     public LinguisticValue(String name, FuzzyNumber number) {
         this.name = name;
         this.number = number;
     }
+
+
 
     public long getId() {
         return id;
@@ -30,5 +41,9 @@ public class LinguisticValue {
 
     public FuzzyNumber getNumber() {
         return number;
+    }
+
+    public void setNumber(FuzzyNumber number) {
+        this.number = number;
     }
 }

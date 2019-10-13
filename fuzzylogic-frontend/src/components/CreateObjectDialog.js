@@ -16,22 +16,26 @@ const useStyles = makeStyles({
 });
 
 export default function(props) {
-  const { onSubmit, open, onClose } = props;
+  const { onSubmit, open, onClose, title, text } = props;
   const [name, setName] = useState("");
   const classes = useStyles();
 
   return (
     <Dialog className={classes.dialog} onClose={onClose} open={open}>
-      <DialogTitle>Add new variable</DialogTitle>
+      <DialogTitle>{title}</DialogTitle>
       <DialogContent>
         <TextField
-          label="variable name"
+          label={text}
           value={name}
           onChange={event => setName(event.target.value)}
         />
       </DialogContent>
       <DialogActions>
-        <Button variant="outlined" onClick={()=>onSubmit(name)} color="primary">
+        <Button
+          variant="outlined"
+          onClick={() => onSubmit(name)}
+          color="primary"
+        >
           Create
         </Button>
         <Button variant="outlined" onClick={onClose} color="secondary">

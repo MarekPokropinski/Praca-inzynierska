@@ -4,7 +4,7 @@ import { withStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import AddVariableDialog from "../components/AddVariableDialog";
+import CreateObjectDialog from "../components/CreateObjectDialog";
 import * as actionCreators from "../actions/variablesActions";
 
 const styles = theme => ({
@@ -15,7 +15,8 @@ const styles = theme => ({
   },
   listItem: {
     border: "2px solid " + theme.palette.primary.light,
-    borderRadius: "5px"
+    borderRadius: "5px",
+    marginBottom : "5px"
   },
   text: {
     color: theme.palette.text.primary
@@ -39,7 +40,6 @@ class MainContainer extends React.Component {
 
   handleAddVariable(name){
     this.props.createVariable(name).then(()=>{
-      console.log(name)
       this.props.displayDialog(false)
     })
   }
@@ -83,10 +83,12 @@ class MainContainer extends React.Component {
         >
           <AddIcon />
         </Fab>
-        <AddVariableDialog
+        <CreateObjectDialog
           open={this.props.isDialogOpen}
           onClose={() => this.props.displayDialog(false)}
           onSubmit={this.handleAddVariable}
+          title="Create linguistic variable"
+          text="variable name"
         />
       </div>
     );
