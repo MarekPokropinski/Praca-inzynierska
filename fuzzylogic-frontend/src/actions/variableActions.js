@@ -22,3 +22,12 @@ export const displayAddValueDialog = display => ({
   type: "DISPLAY_CREATE_VALUE_DIALOG",
   payload: display
 });
+
+export const fetchPlot = id => ({
+  type: "FETCH_VARIABLE_PLOT",
+  payload: {
+    request: {
+      url: `/variables/${id}/plot`
+    }
+  }
+});

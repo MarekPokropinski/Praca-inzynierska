@@ -9,12 +9,12 @@ import {
   Button
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
-import { Link, Route } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as actionCreators from "../actions/variableActions";
 import CreateObjectDialog from "../components/CreateObjectDialog";
-import VariablesContainer from "./VariablesContainer";
+import Plot from "../components/VariableValuesPlot";
 
 const styles = theme => ({
   root: {
@@ -54,7 +54,10 @@ class MainContainer extends React.Component {
   }
 
   refresh() {
-    this.props.fetchVariableDetails(this.props.match.params.id);
+    const { fetchVariableDetails, fetchPlot } = this.props;
+    const id = this.props.match.params.id;
+    fetchVariableDetails(id);
+    fetchPlot(id);
   }
 
   componentDidMount() {
@@ -71,10 +74,14 @@ class MainContainer extends React.Component {
     const {
       classes,
       variable,
+      plot,
       displayCreateValueDialog,
       displayAddValueDialog
     } = this.props;
     if (!variable || !variable.values) {
+      return null;
+    }
+    if(!plot){
       return null;
     }
     if (variable.id !== parseInt(this.props.match.params.id, 10)) {
@@ -88,6 +95,12 @@ class MainContainer extends React.Component {
           </Link>
           <Typography color="textPrimary">{variable.name}</Typography>
         </Breadcrumbs>
+
+        <Plot
+          name={variable.name}
+          values={plot}
+        />
+
         <Button
           className={classes.button}
           variant="contained"
@@ -102,7 +115,7 @@ class MainContainer extends React.Component {
               className={classes.listItem}
               button
               key={key}
-              onClick={() => this.props.history.push(`${variable.id}/`)}
+              onClick={() => this.props.history.push(`${value.id}/`)}
             >
               <ListItemText className={classes.text} primary={value.name} />
             </ListItem>
@@ -124,7 +137,8 @@ class MainContainer extends React.Component {
 const mapStateToProps = state => {
   return {
     variable: state.variable.data,
-    displayCreateValueDialog: state.variable.displayCreateValueDialog
+    displayCreateValueDialog: state.variable.displayCreateValueDialog,
+    plot: state.variable.plot
   };
 };
 

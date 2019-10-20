@@ -1,6 +1,8 @@
 package FuzzySystems.FuzzySets;
 
 import FuzzySystems.FuzzySets.FuzzyNumbers.FuzzyNumber;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -11,6 +13,7 @@ public class LinguisticValue {
     private long id;
     private String name;
     @OneToOne
+    @JoinColumn
     private FuzzyNumber number;
 
     @ManyToOne

@@ -11,6 +11,7 @@ import { Router, Route, Redirect } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import VariablesContainer from "./VariablesContainer";
 import VariableContainer from "./VariableDetailsContainer";
+import ValueDetailsContainer from "./ValueDetailsContainer";
 
 const styles = theme => ({
   root: {
@@ -108,6 +109,7 @@ class MainContainer extends React.Component {
         <div className={classes.tabpanel}>
           <Router history={this.history}>
             <Route exact path="/variables/:id" component={VariableContainer} />
+            <Route exact path="/variables/:id/:valueId" component={ValueDetailsContainer} />
             <Route exact path="/variables/" component={VariablesContainer} />
             <Redirect from="/" to="/variables/" />
           </Router>

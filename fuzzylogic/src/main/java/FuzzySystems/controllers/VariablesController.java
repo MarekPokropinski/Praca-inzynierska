@@ -1,5 +1,6 @@
 package FuzzySystems.controllers;
 
+import FuzzySystems.DTOs.PlotDTO;
 import FuzzySystems.DTOs.VariableDTO;
 import FuzzySystems.DTOs.VariableDetailsDTO;
 import FuzzySystems.Exceptions.NotFoundException;
@@ -31,5 +32,10 @@ public class VariablesController {
     @GetMapping("/{variableId}")
     public VariableDetailsDTO getVariableDetails(@PathVariable long variableId) throws NotFoundException {
         return variablesService.getVariableDetails(variableId);
+    }
+
+    @GetMapping("/{variableId}/plot")
+    public List<PlotDTO> getPlot(@PathVariable long variableId) throws NotFoundException{
+        return variablesService.getPlot(variableId);
     }
 }
