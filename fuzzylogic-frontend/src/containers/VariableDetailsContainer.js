@@ -46,7 +46,7 @@ const styles = theme => ({
   }
 });
 
-class MainContainer extends React.Component {
+class VariableDetailsContainer extends React.Component {
   constructor() {
     super();
     this.handleAddValue = this.handleAddValue.bind(this);
@@ -148,4 +148,4 @@ const mapDispatchToProps = dispatch =>
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(styles)(MainContainer));
+)(withStyles(styles)(VariableDetailsContainer));

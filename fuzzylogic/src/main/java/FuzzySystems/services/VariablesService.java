@@ -4,7 +4,6 @@ import FuzzySystems.DTOs.PlotDTO;
 import FuzzySystems.DTOs.VariableDTO;
 import FuzzySystems.DTOs.VariableDetailsDTO;
 import FuzzySystems.Exceptions.NotFoundException;
-import FuzzySystems.FuzzySets.FuzzyNumbers.FuzzyNumber;
 import FuzzySystems.FuzzySets.LinguisticVariable;
 import FuzzySystems.repositories.VariableRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +43,7 @@ public class VariablesService {
         return linguisticVariable
                 .getValues()
                 .stream()
-                .filter(value->Objects.nonNull(value.getNumber()))
+                .filter(value -> Objects.nonNull(value.getNumber()))
                 .map(value -> value.getNumber().getPlot(value.getName()))
                 .collect(Collectors.toList());
     }

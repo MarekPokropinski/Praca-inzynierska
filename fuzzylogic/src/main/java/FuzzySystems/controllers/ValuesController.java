@@ -1,25 +1,16 @@
 package FuzzySystems.controllers;
 
-import FuzzySystems.DTOs.*;
+import FuzzySystems.DTOs.ValueDTO;
+import FuzzySystems.DTOs.ValueToCreateDTO;
 import FuzzySystems.Exceptions.BadRequestException;
 import FuzzySystems.Exceptions.NotFoundException;
 import FuzzySystems.FuzzySets.FuzzyNumbers.FuzzyNumber;
-import FuzzySystems.FuzzySets.FuzzyNumbers.TriangularNumber;
 import FuzzySystems.FuzzySets.LinguisticValue;
-import FuzzySystems.FuzzySets.LinguisticVariable;
-import FuzzySystems.repositories.FuzzyNumberRepository;
-import FuzzySystems.repositories.ValueRepository;
-import FuzzySystems.repositories.VariableRepository;
 import FuzzySystems.services.ValuesService;
-import FuzzySystems.services.VariablesService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 
 @RestController
@@ -41,7 +32,7 @@ public class ValuesController {
 
     @GetMapping("/{valueId}")
     public LinguisticValue getValueDetails(@PathVariable long valueId) throws NotFoundException {
-        return valuesService.getValueDetails(valueId);
+        return valuesService.getValueDetails(valueId).orElseThrow(NotFoundException::new);
     }
 
     @GetMapping("/{valueId}/number")

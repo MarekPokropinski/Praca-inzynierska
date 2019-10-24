@@ -13,7 +13,6 @@ import { InputLabel, TextField } from "@material-ui/core";
 
 export default function TriangularNumberForm(props) {
   const { onChange, number } = props;
-  console.log(props)
   let ret = []
     for (let key in number) {
       if(key!=='type') {

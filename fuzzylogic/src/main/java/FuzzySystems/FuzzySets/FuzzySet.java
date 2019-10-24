@@ -7,9 +7,9 @@ import javax.persistence.*;
 @MappedSuperclass
 public class FuzzySet {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @OneToOne(targetEntity=MembershipFunction.class)
+    @OneToOne(targetEntity = MembershipFunction.class)
     private MembershipFunction membershipFunction;
 
     public FuzzySet(MembershipFunction membershipFunction) {

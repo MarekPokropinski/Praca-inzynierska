@@ -1,5 +1,4 @@
 export default function value(state = { data: {} }, action) {
-  console.log(action.type);
   switch (action.type) {
     case "FETCH_VALUE_SUCCESS":
       return {

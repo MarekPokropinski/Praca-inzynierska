@@ -1,12 +1,8 @@
 package FuzzySystems.FuzzySets.FuzzyNumbers;
 
 import FuzzySystems.DTOs.PlotDTO;
-import FuzzySystems.FuzzySets.MembershipFunctions.FunctionFragment;
-import FuzzySystems.FuzzySets.MembershipFunctions.LinearFragment;
-import FuzzySystems.FuzzySets.MembershipFunctions.MembershipFunction;
 
 import javax.persistence.Entity;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 @Entity
@@ -68,6 +64,6 @@ public class TriangularNumber extends FuzzyNumber {
 
     @Override
     public PlotDTO getPlot(String name) {
-        return new PlotDTO(Arrays.asList(this.a,this.b,this.c),Arrays.asList(0.0f,1.0f,0.0f),name, "linear");
+        return new PlotDTO(Arrays.asList(this.a, this.b, this.c), Arrays.asList(0.0f, 1.0f, 0.0f), name, "linear");
     }
 }

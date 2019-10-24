@@ -4,8 +4,7 @@ import { withStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import CreateObjectDialog from "../components/CreateObjectDialog";
-import * as actionCreators from "../actions/variablesActions";
+import * as actionCreators from "../actions/rulesActions";
 
 const styles = theme => ({
   root: { width: "100%" },
@@ -28,50 +27,43 @@ const styles = theme => ({
   }
 });
 
-class VariablesContainer extends React.Component {
-  constructor(){
-    super()
-    this.handleAddVariable =this.handleAddVariable.bind(this)
-  }
+class RulesContainer extends React.Component {
+  // constructor(){
+  //   super()
+  //   // this.handleAddVariable =this.handleAddVariable.bind(this)
+  // }
 
   componentDidMount() {
-    this.props.fetchVariables();
+    this.props.fetchRules();
   }
 
   handleAddVariable(name){
-    this.props.createVariable(name).then(()=>{
-      this.props.displayDialog(false)
-    })
+    // this.props.createVariable(name).then(()=>{
+    //   this.props.displayDialog(false)
+    // })
   }
 
   render() {
-    const { classes, variables } = this.props;
-    if (!variables) {
+    const { classes, rules } = this.props;
+    if (!rules) {
       return null;
     }
     return (
       <div className={classes.root}>
         <List className={classes.list} component="nav">
-          {variables.map((variable, key) => (
+          {rules.map(rule => (
             <ListItem
               className={classes.listItem}
               button
-              key={key}
+              key={rule.id}
               onClick={() =>
-                this.props.history.push(`${variable.id}/`)
+                this.props.history.push(`${rule.id}/`)
               }
             >
               <ListItemText
                 className={classes.text}
-                primary={variable.name}
-                secondary={
-                  variable.values.length === 0
-                    ? ""
-                    : "Values: " +
-                      variable.values.reduce(
-                        (prev, current) => prev + ", " + current
-                      )
-                }
+                primary={rule.description}
+                secondary={rule.id}
               />
             </ListItem>
           ))}
@@ -79,24 +71,17 @@ class VariablesContainer extends React.Component {
         <Fab
           className={classes.fab}
           color="primary"
-          onClick={() => this.props.displayDialog(true)}
+          onClick={() => this.props.history.push('new-rule')}          
         >
           <AddIcon />
         </Fab>
-        <CreateObjectDialog
-          open={this.props.isDialogOpen}
-          onClose={() => this.props.displayDialog(false)}
-          onSubmit={this.handleAddVariable}
-          title="Create linguistic variable"
-          text="variable name"
-        />
       </div>
     );
   }
 }
 
 const mapStateToProps = state => {
-  return state.variables;
+  return state.rules;
 };
 
 const mapDispatchToProps = dispatch =>
@@ -105,4 +90,4 @@ const mapDispatchToProps = dispatch =>
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(styles)(VariablesContainer));
+)(withStyles(styles)(RulesContainer));

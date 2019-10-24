@@ -12,6 +12,8 @@ import { createBrowserHistory } from "history";
 import VariablesContainer from "./VariablesContainer";
 import VariableContainer from "./VariableDetailsContainer";
 import ValueDetailsContainer from "./ValueDetailsContainer";
+import RulesContainer from "./RulesContainer";
+import RuleDetailsContainer from "./RuleDetailsContainer";
 
 const styles = theme => ({
   root: {
@@ -56,16 +58,21 @@ function a11yProps(index) {
 class MainContainer extends React.Component {
   constructor() {
     super();
-    this.state = {
-      selectedTab: 1
-    };
     this.history = createBrowserHistory();
-    this.history.listen(history => console.log(history));
+    this.state = {
+      selectedTab:1
+    }
+    this.routes = ["/variables/", "/rules/"];
+  }
+
+  componentDidMount() {
+    this.setState({selectedTab:this.routes.map(route=>this.history.location.pathname.startsWith(route)).indexOf(true)+1})
   }
 
   render() {
-    const { selectedTab } = this.state;
     const { classes, palette, setPalette } = this.props;
+    const {selectedTab} = this.state
+
     return (
       <div className={classes.root}>
         <div className={classes.tabs_container}>
@@ -74,11 +81,9 @@ class MainContainer extends React.Component {
             orientation="vertical"
             value={selectedTab}
             onChange={(_event, newValue) => {
-              const routes = ["/variables/", "/rules/"];
-              const route = routes[newValue - 1];
-              this.history.push({pathname:route})
-              // this.history.replace(route);
-              // console.log({...this.history.location})
+              const route = this.routes[newValue - 1];
+              this.history.push({ pathname: route });
+              this.setState({selectedTab:newValue})
             }}
           >
             <Tab
@@ -108,10 +113,23 @@ class MainContainer extends React.Component {
         </div>
         <div className={classes.tabpanel}>
           <Router history={this.history}>
-            <Route exact path="/variables/:id" component={VariableContainer} />
-            <Route exact path="/variables/:id/:valueId" component={ValueDetailsContainer} />
-            <Route exact path="/variables/" component={VariablesContainer} />
-            <Redirect from="/" to="/variables/" />
+            {/* <Route exact path="/"> */}
+              <Redirect to="/variables/" />
+            {/* </Route> */}
+            <Route exact path="/variables/:id/" component={VariableContainer} />
+            <Route
+              exact
+              path="/variables/:id/:valueId"
+              component={ValueDetailsContainer}
+            />
+            <Route
+              strict
+              exact
+              path="/variables/"
+              component={VariablesContainer}
+            />
+            <Route strict exact path="/rules/" component={RulesContainer} />
+            <Route exact path="/rules/:rule" component={RuleDetailsContainer} />
           </Router>
         </div>
       </div>

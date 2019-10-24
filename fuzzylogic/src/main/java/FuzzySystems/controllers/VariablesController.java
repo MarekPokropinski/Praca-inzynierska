@@ -4,14 +4,11 @@ import FuzzySystems.DTOs.PlotDTO;
 import FuzzySystems.DTOs.VariableDTO;
 import FuzzySystems.DTOs.VariableDetailsDTO;
 import FuzzySystems.Exceptions.NotFoundException;
-import FuzzySystems.FuzzySets.LinguisticVariable;
-import FuzzySystems.repositories.VariableRepository;
 import FuzzySystems.services.VariablesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("variables")
@@ -25,7 +22,7 @@ public class VariablesController {
     }
 
     @PostMapping("/")
-    public VariableDTO createVariable(@RequestBody String variableName){
+    public VariableDTO createVariable(@RequestBody String variableName) {
         return variablesService.createVariable(variableName);
     }
 
@@ -35,7 +32,7 @@ public class VariablesController {
     }
 
     @GetMapping("/{variableId}/plot")
-    public List<PlotDTO> getPlot(@PathVariable long variableId) throws NotFoundException{
+    public List<PlotDTO> getPlot(@PathVariable long variableId) throws NotFoundException {
         return variablesService.getPlot(variableId);
     }
 }

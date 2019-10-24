@@ -65,7 +65,6 @@ class ValueDetailsContainer extends React.Component {
   handleApply() {
     const { newValue, UpdateNumber, fetchPlot, variable } = this.props;
 
-    console.log(newValue);
 
     const { type, ...parameters } = newValue.number;
     const parametersArray = Object.values(parameters);
@@ -142,7 +141,7 @@ class ValueDetailsContainer extends React.Component {
           >
             {/* <MenuItem value="none">none</MenuItem> */}
             <MenuItem value="triangular">triangular</MenuItem>
-            <MenuItem value="trapezoidal">trapeze</MenuItem>
+            <MenuItem value="trapezoidal">trapezoidal</MenuItem>
           </Select>
           <TriangularNumberForm number={number} onChange={setParams} />
           <Button
@@ -161,7 +160,7 @@ class ValueDetailsContainer extends React.Component {
     );
   }
 }
-console.log(actionCreators);
+
 const mapStateToProps = state => {
   return {
     variable: state.variable.data,

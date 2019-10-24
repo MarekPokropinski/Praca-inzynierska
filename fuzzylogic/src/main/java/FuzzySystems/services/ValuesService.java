@@ -15,17 +15,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class ValuesService {
 
     @Autowired
-    ValueRepository valueRepository;
-
-    @Autowired
     public VariablesService variablesService;
-
+    @Autowired
+    ValueRepository valueRepository;
     @Autowired
     private FuzzyNumberRepository fuzzyNumberRepository;
 
@@ -41,12 +40,11 @@ public class ValuesService {
         return ValueDTO.fromEntity(value);
     }
 
-    public LinguisticValue getValueDetails(long valueId) throws NotFoundException {
-        return valueRepository.findById(valueId).orElseThrow(NotFoundException::new);
+    public Optional<LinguisticValue> getValueDetails(long valueId) {
+        return valueRepository.findById(valueId);
     }
 
     public FuzzyNumber getFuzzyNumber(long valueId) throws NotFoundException {
-        FuzzyNumber number = valueRepository.findById(valueId).orElseThrow(NotFoundException::new).getNumber();
         return valueRepository.findById(valueId).orElseThrow(NotFoundException::new).getNumber();
     }
 
@@ -54,7 +52,7 @@ public class ValuesService {
         LinguisticValue value = valueRepository.findById(valueId).orElseThrow(NotFoundException::new);
         TriangularNumber fuzzyNumber;
 
-        validateNumberType(value,"triangular");
+        validateNumberType(value, "triangular");
 
 
         fuzzyNumber = Objects.isNull(value.getNumber()) ? new TriangularNumber() : (TriangularNumber) value.getNumber();
@@ -92,7 +90,7 @@ public class ValuesService {
 
     public LinguisticValue validateNumberType(LinguisticValue value, String type) {
         FuzzyNumber fuzzyNumber = value.getNumber();
-        if(fuzzyNumber!=null && !fuzzyNumber.getType().equals(type)){
+        if (fuzzyNumber != null && !fuzzyNumber.getType().equals(type)) {
             value.setNumber(null);
             value = valueRepository.save(value);
             fuzzyNumberRepository.delete(fuzzyNumber);

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class FuzzysetsController {
 
     @RequestMapping("/")
-    public String index(){
+    public String index() {
         return "Hello world";
     }
 }

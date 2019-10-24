@@ -12,7 +12,7 @@ public class ValueDTO {
     }
 
     public static ValueDTO fromEntity(LinguisticValue linguisticValue) {
-        return new ValueDTO(linguisticValue.getId(),linguisticValue.getName());
+        return new ValueDTO(linguisticValue.getId(), linguisticValue.getName());
     }
 
     public String getName() {

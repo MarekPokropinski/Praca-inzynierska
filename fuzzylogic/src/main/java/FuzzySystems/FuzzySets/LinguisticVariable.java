@@ -13,7 +13,7 @@ public class LinguisticVariable {
     @OneToMany(mappedBy = "linguisticVariable", cascade = CascadeType.ALL)
     private List<LinguisticValue> values;
 
-    public LinguisticVariable(){
+    public LinguisticVariable() {
         values = new ArrayList<>();
     }
 

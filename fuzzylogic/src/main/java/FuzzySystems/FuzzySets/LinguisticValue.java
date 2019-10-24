@@ -1,15 +1,14 @@
 package FuzzySystems.FuzzySets;
 
 import FuzzySystems.FuzzySets.FuzzyNumbers.FuzzyNumber;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
 @Entity
 public class LinguisticValue {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String name;
     @OneToOne
@@ -18,9 +17,11 @@ public class LinguisticValue {
 
     @ManyToOne
     @JoinColumn
+    @JsonIgnore
     private LinguisticVariable linguisticVariable;
 
-    public LinguisticValue() {}
+    public LinguisticValue() {
+    }
 
     public LinguisticValue(String name, LinguisticVariable linguisticVariable) {
         this.name = name;
@@ -32,7 +33,9 @@ public class LinguisticValue {
         this.number = number;
     }
 
-
+    public LinguisticVariable getLinguisticVariable() {
+        return linguisticVariable;
+    }
 
     public long getId() {
         return id;

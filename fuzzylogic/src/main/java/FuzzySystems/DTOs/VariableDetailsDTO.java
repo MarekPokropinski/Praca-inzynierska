@@ -16,7 +16,7 @@ public class VariableDetailsDTO {
         this.values = values;
     }
 
-    public static VariableDetailsDTO fromEntity(LinguisticVariable variable){
+    public static VariableDetailsDTO fromEntity(LinguisticVariable variable) {
         return new VariableDetailsDTO(variable.getId(), variable.getName(), variable.getValues());
     }
 

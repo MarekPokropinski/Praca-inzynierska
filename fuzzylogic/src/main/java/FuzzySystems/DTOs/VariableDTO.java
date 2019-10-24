@@ -18,7 +18,7 @@ public class VariableDTO {
 
     public static VariableDTO fromEntity(LinguisticVariable variable) {
         List<String> values = variable.getValues().stream().map(linguisticValue -> linguisticValue.getName()).collect(Collectors.toList());
-        return new VariableDTO(variable.getId(),variable.getName(),values);
+        return new VariableDTO(variable.getId(), variable.getName(), values);
     }
 
     public long getId() {

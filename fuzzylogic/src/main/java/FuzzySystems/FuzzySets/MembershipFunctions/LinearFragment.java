@@ -8,9 +8,9 @@ public class LinearFragment extends FunctionFragment {
     private float a;
     private float b;
 
-    public LinearFragment(float start, float end, float a, float b){
-        super(start,end);
-        this.a=a;
-        this.b=b;
+    public LinearFragment(float start, float end, float a, float b) {
+        super(start, end);
+        this.a = a;
+        this.b = b;
     }
 }
