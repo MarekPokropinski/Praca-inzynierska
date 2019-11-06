@@ -1,6 +1,9 @@
 package FuzzySystems.services;
 
+import FuzzySystems.DTOs.FuzzyRuleDTO;
 import FuzzySystems.DTOs.FuzzyRuleDescriptionDTO;
+import FuzzySystems.DTOs.FuzzyRuleDetaisDTO;
+import FuzzySystems.DTOs.PremiseDTO;
 import FuzzySystems.Exceptions.NotFoundException;
 import FuzzySystems.FuzzySets.LinguisticValue;
 import FuzzySystems.FuzzySets.Rules.FuzzyRule;
@@ -51,6 +54,40 @@ public class RulesService {
         FuzzyRule fuzzyRule = new FuzzyRule(premisesValues, conclusionValues);
         fuzzyRule = fuzzyRulesRepository.save(fuzzyRule);
         return buildDescription(fuzzyRule);
+    }
+
+    public FuzzyRuleDetaisDTO getRuleDetails(long id) throws NotFoundException {
+        FuzzyRule fuzzyRule = fuzzyRulesRepository.findById(id).orElseThrow(NotFoundException::new);
+        List<PremiseDTO> premises = fuzzyRule
+                .getPremises()
+                .stream()
+                .map(linguisticValue -> new PremiseDTO(linguisticValue.getLinguisticVariable().getId(), linguisticValue.getLinguisticVariable().getName(), linguisticValue.getId(), linguisticValue.getName()))
+                .collect(Collectors.toList());
+
+        List<PremiseDTO> conclusions = fuzzyRule
+                .getConclusions()
+                .stream()
+                .map(linguisticValue -> new PremiseDTO(linguisticValue.getLinguisticVariable().getId(), linguisticValue.getLinguisticVariable().getName(), linguisticValue.getId(), linguisticValue.getName()))
+                .collect(Collectors.toList());
+
+        return new FuzzyRuleDetaisDTO(fuzzyRule.getId(), premises, conclusions);
+    }
+
+    public void updateRule(long id, FuzzyRuleDTO fuzzyRuleDTO) {
+        List<LinguisticValue> premisesValues = fuzzyRuleDTO.getPremises()
+                .stream()
+                .map(premiseId -> valuesService.getValueDetails(premiseId).orElse(null))
+                .collect(Collectors.toList());
+
+        List<LinguisticValue> conclusionValues = fuzzyRuleDTO.getConclusions()
+                .stream()
+                .map(conclusionId -> valuesService.getValueDetails(conclusionId).orElse(null))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        FuzzyRule fuzzyRule = new FuzzyRule(premisesValues, conclusionValues);
+        fuzzyRule.setId(id);
+        fuzzyRule = fuzzyRulesRepository.save(fuzzyRule);
     }
 
     public List<FuzzyRuleDescriptionDTO> getRules() {

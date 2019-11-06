@@ -8,16 +8,16 @@ import java.util.stream.Collectors;
 public class VariableDTO {
     private long id;
     private String name;
-    private List<String> values;
+    private List<ValueDTO> values;
 
-    public VariableDTO(long id, String name, List<String> values) {
+    public VariableDTO(long id, String name, List<ValueDTO> values) {
         this.id = id;
         this.name = name;
         this.values = values;
     }
 
     public static VariableDTO fromEntity(LinguisticVariable variable) {
-        List<String> values = variable.getValues().stream().map(linguisticValue -> linguisticValue.getName()).collect(Collectors.toList());
+        List<ValueDTO> values = variable.getValues().stream().map(linguisticValue -> ValueDTO.fromEntity(linguisticValue)).collect(Collectors.toList());
         return new VariableDTO(variable.getId(), variable.getName(), values);
     }
 
@@ -29,7 +29,7 @@ public class VariableDTO {
         return name;
     }
 
-    public List<String> getValues() {
+    public List<ValueDTO> getValues() {
         return values;
     }
 }

@@ -11,12 +11,12 @@ const styles = theme => ({
   root: { width: "100%" },
   list: {
     width: "100%",
-    padding : "5px"
+    padding: "5px"
   },
   listItem: {
     border: "2px solid " + theme.palette.primary.light,
     borderRadius: "5px",
-    marginBottom : "5px"
+    marginBottom: "5px"
   },
   text: {
     color: theme.palette.text.primary
@@ -29,19 +29,19 @@ const styles = theme => ({
 });
 
 class VariablesContainer extends React.Component {
-  constructor(){
-    super()
-    this.handleAddVariable =this.handleAddVariable.bind(this)
+  constructor() {
+    super();
+    this.handleAddVariable = this.handleAddVariable.bind(this);
   }
 
   componentDidMount() {
     this.props.fetchVariables();
   }
 
-  handleAddVariable(name){
-    this.props.createVariable(name).then(()=>{
-      this.props.displayDialog(false)
-    })
+  handleAddVariable(name) {
+    this.props.createVariable(name).then(() => {
+      this.props.displayDialog(false);
+    });
   }
 
   render() {
@@ -57,9 +57,7 @@ class VariablesContainer extends React.Component {
               className={classes.listItem}
               button
               key={key}
-              onClick={() =>
-                this.props.history.push(`${variable.id}/`)
-              }
+              onClick={() => this.props.history.push(`${variable.id}/`)}
             >
               <ListItemText
                 className={classes.text}
@@ -68,9 +66,9 @@ class VariablesContainer extends React.Component {
                   variable.values.length === 0
                     ? ""
                     : "Values: " +
-                      variable.values.reduce(
-                        (prev, current) => prev + ", " + current
-                      )
+                      variable.values
+                        .map(value => value.name)
+                        .reduce((prev, current) => prev + ", " + current)
                 }
               />
             </ListItem>
