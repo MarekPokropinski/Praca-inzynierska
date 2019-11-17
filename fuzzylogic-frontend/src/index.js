@@ -11,10 +11,10 @@ import reducers from "./reducers/reducers";
 // import variables from "./reducers/variables"
 
 const client = axios.create({
-  baseURL: "http://8b.t4.ds.pwr.wroc.pl:8080/",
+  baseURL: "http://localhost:8080/",
   responseType: "json",
   headers: {
-    'Content-Type':'application/json'
+    "Content-Type": "application/json"
   }
 });
 const store = createStore(reducers, applyMiddleware(axiosMiddleware(client)));

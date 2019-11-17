@@ -5,8 +5,9 @@ import FuzzySystems.DTOs.FuzzyRuleDescriptionDTO;
 import FuzzySystems.DTOs.FuzzyRuleDetaisDTO;
 import FuzzySystems.DTOs.PremiseDTO;
 import FuzzySystems.Exceptions.NotFoundException;
+import FuzzySystems.FuzzySets.FuzzySystem;
 import FuzzySystems.FuzzySets.LinguisticValue;
-import FuzzySystems.FuzzySets.Rules.FuzzyRule;
+import FuzzySystems.FuzzySets.FuzzyRule;
 import FuzzySystems.repositories.FuzzyRulesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,10 +21,13 @@ import java.util.stream.Collectors;
 public class RulesService {
 
     @Autowired
-    public ValuesService valuesService;
+    private ValuesService valuesService;
 
     @Autowired
-    public FuzzyRulesRepository fuzzyRulesRepository;
+    private FuzzySystemService fuzzySystemService;
+
+    @Autowired
+    private FuzzyRulesRepository fuzzyRulesRepository;
 
     private FuzzyRuleDescriptionDTO buildDescription(FuzzyRule fuzzyRule) {
         Function<List<LinguisticValue>, String> convertValuesToString =
@@ -39,7 +43,7 @@ public class RulesService {
         return new FuzzyRuleDescriptionDTO(fuzzyRule.getId(), description);
     }
 
-    public FuzzyRuleDescriptionDTO createRule(List<Long> premises, List<Long> conclusions) throws NotFoundException {
+    public FuzzyRuleDescriptionDTO createRule(long systemId,List<Long> premises, List<Long> conclusions) throws NotFoundException {
         List<LinguisticValue> premisesValues = premises
                 .stream()
                 .map(id -> valuesService.getValueDetails(id).orElse(null))
@@ -51,7 +55,8 @@ public class RulesService {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
-        FuzzyRule fuzzyRule = new FuzzyRule(premisesValues, conclusionValues);
+        FuzzySystem fuzzySystem = fuzzySystemService.getSystem(systemId).orElseThrow(NotFoundException::new);
+        FuzzyRule fuzzyRule = new FuzzyRule(fuzzySystem, premisesValues, conclusionValues);
         fuzzyRule = fuzzyRulesRepository.save(fuzzyRule);
         return buildDescription(fuzzyRule);
     }
@@ -73,7 +78,11 @@ public class RulesService {
         return new FuzzyRuleDetaisDTO(fuzzyRule.getId(), premises, conclusions);
     }
 
-    public void updateRule(long id, FuzzyRuleDTO fuzzyRuleDTO) {
+    public List<FuzzyRule> getRulesEntities(long systemId) {
+        return fuzzyRulesRepository.findByFuzzySystemId(systemId);
+    }
+
+    public void updateRule(long id, FuzzyRuleDTO fuzzyRuleDTO) throws NotFoundException {
         List<LinguisticValue> premisesValues = fuzzyRuleDTO.getPremises()
                 .stream()
                 .map(premiseId -> valuesService.getValueDetails(premiseId).orElse(null))
@@ -85,13 +94,14 @@ public class RulesService {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
-        FuzzyRule fuzzyRule = new FuzzyRule(premisesValues, conclusionValues);
-        fuzzyRule.setId(id);
+        FuzzyRule fuzzyRule = fuzzyRulesRepository.findById(id).orElseThrow(NotFoundException::new);
+        fuzzyRule.setPremises(premisesValues);
+        fuzzyRule.setConclusions(conclusionValues);
         fuzzyRule = fuzzyRulesRepository.save(fuzzyRule);
     }
 
-    public List<FuzzyRuleDescriptionDTO> getRules() {
-        return fuzzyRulesRepository.findAll()
+    public List<FuzzyRuleDescriptionDTO> getRules(long systemId) {
+        return fuzzyRulesRepository.findByFuzzySystemId(systemId)
                 .stream()
                 .map(this::buildDescription)
                 .collect(Collectors.toList());

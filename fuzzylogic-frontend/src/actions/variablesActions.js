@@ -1,19 +1,19 @@
-export const fetchVariables = () => ({
+export const fetchVariables = systemId => ({
   type: "FETCH_VARIABLES",
   payload: {
     request: {
-      url: "/variables/"
+      url: `systems/${systemId}/variables/`
     }
   }
 });
 
-export const createVariable = name => ({
+export const createVariable = (systemId, name, isInput) => ({
   type: "CREATE_VARIABLE",
   payload: {
     request: {
-      url: "/variables/",
+      url: `systems/${systemId}/variables/`,
       method: "POST",
-      data : name
+      data: { name, input: isInput }
     }
   }
 });

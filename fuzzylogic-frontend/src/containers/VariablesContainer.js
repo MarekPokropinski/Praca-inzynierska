@@ -35,18 +35,23 @@ class VariablesContainer extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchVariables();
+    const { system } = this.props;
+    if (!system) {
+      return;
+    }
+    this.props.fetchVariables(system.id);
   }
 
-  handleAddVariable(name) {
-    this.props.createVariable(name).then(() => {
+  handleAddVariable(name, isInput) {
+    const { system } = this.props;
+    this.props.createVariable(system.id, name, isInput).then(() => {
       this.props.displayDialog(false);
     });
   }
 
   render() {
-    const { classes, variables } = this.props;
-    if (!variables) {
+    const { classes, variables, system } = this.props;
+    if (!variables || !system) {
       return null;
     }
     return (
@@ -61,7 +66,9 @@ class VariablesContainer extends React.Component {
             >
               <ListItemText
                 className={classes.text}
-                primary={variable.name}
+                primary={
+                  (variable.input ? "Input: " : "Output: ") + variable.name
+                }
                 secondary={
                   variable.values.length === 0
                     ? ""
@@ -87,6 +94,7 @@ class VariablesContainer extends React.Component {
           onSubmit={this.handleAddVariable}
           title="Create linguistic variable"
           text="variable name"
+          checkboxText="is input"
         />
       </div>
     );
@@ -94,7 +102,10 @@ class VariablesContainer extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return state.variables;
+  return {
+    ...state.variables,
+    system: state.systems.system
+  };
 };
 
 const mapDispatchToProps = dispatch =>

@@ -11,27 +11,26 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("rules")
 public class RulesController {
     @Autowired
     private RulesService rulesService;
 
-    @GetMapping("/")
-    public List<FuzzyRuleDescriptionDTO> getRules() {
-        return rulesService.getRules();
+    @GetMapping("systems/{systemId}/rules")
+    public List<FuzzyRuleDescriptionDTO> getRules(@PathVariable long systemId) {
+        return rulesService.getRules(systemId);
     }
 
-    @PostMapping("/")
-    public void createRule(@RequestBody FuzzyRuleDTO fuzzyRuleDTO) throws NotFoundException {
-        rulesService.createRule(fuzzyRuleDTO.getPremises(), fuzzyRuleDTO.getConclusions());
+    @PostMapping("systems/{systemId}/rules")
+    public void createRule(@PathVariable long systemId, @RequestBody FuzzyRuleDTO fuzzyRuleDTO) throws NotFoundException {
+        rulesService.createRule(systemId, fuzzyRuleDTO.getPremises(), fuzzyRuleDTO.getConclusions());
     }
 
-    @GetMapping("/{ruleId}")
+    @GetMapping("rules/{ruleId}")
     public FuzzyRuleDetaisDTO getRuleDetails(@PathVariable long ruleId) throws NotFoundException {
         return rulesService.getRuleDetails(ruleId);
     }
 
-    @PutMapping("/{ruleId}")
+    @PutMapping("rules/{ruleId}")
     public void updateRule(@PathVariable long ruleId, @RequestBody FuzzyRuleDTO fuzzyRuleDTO) throws NotFoundException {
         rulesService.updateRule(ruleId, fuzzyRuleDTO);
     }

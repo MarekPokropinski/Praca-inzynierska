@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface VariableRepository extends CrudRepository<LinguisticVariable, Long> {
     List<LinguisticVariable> findAll();
+    List<LinguisticVariable> findByFuzzySystemId(long id);
 }

@@ -1,6 +1,9 @@
 package FuzzySystems.FuzzySets.FuzzyNumbers;
 
 import FuzzySystems.DTOs.PlotDTO;
+import com.fuzzylite.term.Term;
+import com.fuzzylite.term.Triangle;
+import org.springframework.data.util.Pair;
 
 import javax.persistence.Entity;
 import java.util.Arrays;
@@ -66,4 +69,15 @@ public class TriangularNumber extends FuzzyNumber {
     public PlotDTO getPlot(String name) {
         return new PlotDTO(Arrays.asList(this.a, this.b, this.c), Arrays.asList(0.0f, 1.0f, 0.0f), name, "linear");
     }
+
+    @Override
+    public Term getTerm(String name) {
+        return new Triangle(name,a,b,c);
+    }
+
+    @Override
+    public Pair<Double, Double> getRange() {
+        return Pair.of((double)a,(double)c);
+    }
+
 }

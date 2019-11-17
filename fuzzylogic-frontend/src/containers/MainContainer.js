@@ -9,11 +9,14 @@ import {
 import { withStyles } from "@material-ui/core/styles";
 import { Router, Route, Redirect } from "react-router-dom";
 import { createBrowserHistory } from "history";
+import { connect } from "react-redux";
 import VariablesContainer from "./VariablesContainer";
 import VariableContainer from "./VariableDetailsContainer";
 import ValueDetailsContainer from "./ValueDetailsContainer";
 import RulesContainer from "./RulesContainer";
 import RuleDetailsContainer from "./RuleDetailsContainer";
+import SystemsContainer from "./SystemsContainer";
+import ProcessContainer from "./ProcessContainer";
 
 const styles = theme => ({
   root: {
@@ -60,18 +63,23 @@ class MainContainer extends React.Component {
     super();
     this.history = createBrowserHistory();
     this.state = {
-      selectedTab:1
-    }
-    this.routes = ["/variables/", "/rules/"];
+      selectedTab: 1
+    };
+    this.routes = ["/systems/", "/variables/", "/rules/", "/process/"];
   }
 
   componentDidMount() {
-    this.setState({selectedTab:this.routes.map(route=>this.history.location.pathname.startsWith(route)).indexOf(true)+1})
+    this.setState({
+      selectedTab:
+        this.routes
+          .map(route => this.history.location.pathname.startsWith(route))
+          .indexOf(true) + 1
+    });
   }
 
   render() {
-    const { classes, palette, setPalette } = this.props;
-    const {selectedTab} = this.state
+    const { classes, palette, setPalette, system } = this.props;
+    const { selectedTab } = this.state;
 
     return (
       <div className={classes.root}>
@@ -83,7 +91,7 @@ class MainContainer extends React.Component {
             onChange={(_event, newValue) => {
               const route = this.routes[newValue - 1];
               this.history.push({ pathname: route });
-              this.setState({selectedTab:newValue})
+              this.setState({ selectedTab: newValue });
             }}
           >
             <Tab
@@ -91,10 +99,36 @@ class MainContainer extends React.Component {
               label="Fuzzy logic systems"
               disabled
               wrapped
-              {...a11yProps(3)}
+              {...a11yProps(30)}
             />
-            <Tab className={classes.tab} label="Variables" {...a11yProps(0)} />
-            <Tab className={classes.tab} label="Rules" {...a11yProps(1)} />
+            <Tab
+              key={0}
+              className={classes.tab}
+              label="Systems"
+              {...a11yProps(0)}
+            />
+            {system
+              ? [
+                  <Tab
+                    key={1}
+                    className={classes.tab}
+                    label="Variables"
+                    {...a11yProps(1)}
+                  />,
+                  <Tab
+                    key={2}
+                    className={classes.tab}
+                    label="Rules"
+                    {...a11yProps(2)}
+                  />,
+                  <Tab
+                    key={3}
+                    className={classes.tab}
+                    label="Process"
+                    {...a11yProps(3)}
+                  />
+                ]
+              : null}
           </Tabs>
           <FormGroup row>
             <FormControlLabel
@@ -114,7 +148,7 @@ class MainContainer extends React.Component {
         <div className={classes.tabpanel}>
           <Router history={this.history}>
             {/* <Route exact path="/"> */}
-              <Redirect to="/variables/" />
+            <Redirect to="/systems/" />
             {/* </Route> */}
             <Route exact path="/variables/:id/" component={VariableContainer} />
             <Route
@@ -128,7 +162,9 @@ class MainContainer extends React.Component {
               path="/variables/"
               component={VariablesContainer}
             />
+            <Route strict exact path="/process/" component={ProcessContainer} />
             <Route strict exact path="/rules/" component={RulesContainer} />
+            <Route strict exact path="/systems/" component={SystemsContainer} />
             <Route exact path="/rules/:rule" component={RuleDetailsContainer} />
           </Router>
         </div>
@@ -136,4 +172,8 @@ class MainContainer extends React.Component {
     );
   }
 }
-export default withStyles(styles)(MainContainer);
+export default withStyles(styles)(
+  connect(state => ({
+    system: state.systems.system
+  }))(MainContainer)
+);

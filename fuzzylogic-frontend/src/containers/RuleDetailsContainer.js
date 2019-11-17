@@ -64,11 +64,18 @@ class RuleDetailsContainer extends React.Component {
   }
 
   refresh() {
-    const { fetchVariables, fetchRuleDetails, clearRuleDetails } = this.props;
+    const {
+      fetchVariables,
+      fetchRuleDetails,
+      clearRuleDetails,
+      system
+    } = this.props;
     this.ruleId = this.props.match.params.rule;
     this.ruleId = this.ruleId === "new-rule" ? null : this.ruleId;
-
-    fetchVariables();
+    if(!system) {
+      return;
+    }
+    fetchVariables(system.id);
     if (this.ruleId !== null) {
       fetchRuleDetails(this.props.match.params.rule);
     } else {
@@ -77,7 +84,7 @@ class RuleDetailsContainer extends React.Component {
   }
 
   handleClickSave() {
-    const { variables, rule, createRule, updateRule } = this.props;
+    const { variables, rule, createRule, updateRule, system } = this.props;
 
     const premiseToId = premise =>
       variables
@@ -88,7 +95,7 @@ class RuleDetailsContainer extends React.Component {
     const conclusionIds = rule.conclusions.map(premiseToId);
 
     if (this.ruleId === null) {
-      createRule(premisesIds, conclusionIds);
+      createRule(system.id, premisesIds, conclusionIds);
     } else {
       updateRule(this.ruleId, premisesIds, conclusionIds);
     }
@@ -108,7 +115,7 @@ class RuleDetailsContainer extends React.Component {
     if (!variables || !rule) {
       return null;
     }
-    console.log(variables);
+
     return (
       <div className={classes.root}>
         <Breadcrumbs>
@@ -129,7 +136,7 @@ class RuleDetailsContainer extends React.Component {
             <PremisesList
               title="Premises"
               list={rule.premises}
-              variables={variables}
+              variables={variables.filter(variable => variable.input)}
               onChange={modifyPremise}
               onAdd={addPremise}
             />
@@ -143,7 +150,7 @@ class RuleDetailsContainer extends React.Component {
             <PremisesList
               title="Conclusions"
               list={rule.conclusions}
-              variables={variables}
+              variables={variables.filter(variable => !variable.input)}
               onChange={modifyConclusion}
               onAdd={addConclusion}
             />
@@ -166,7 +173,8 @@ class RuleDetailsContainer extends React.Component {
 const mapStateToProps = state => {
   return {
     variables: state.variables.variables,
-    rule: state.ruleDetails.rule
+    rule: state.ruleDetails.rule,
+    system: state.systems.system
   };
 };
 

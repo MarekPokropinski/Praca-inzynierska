@@ -1,6 +1,9 @@
 package FuzzySystems.FuzzySets.FuzzyNumbers;
 
 import FuzzySystems.DTOs.PlotDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fuzzylite.term.Term;
+import org.springframework.data.util.Pair;
 
 import javax.persistence.*;
 
@@ -18,4 +21,10 @@ public abstract class FuzzyNumber {
     public abstract String getType();
 
     public abstract PlotDTO getPlot(String name);
+
+    @JsonIgnore
+    public abstract Term getTerm(String name);
+
+    @JsonIgnore
+    public abstract Pair<Double,Double> getRange();
 }

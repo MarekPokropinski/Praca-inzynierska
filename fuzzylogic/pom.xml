@@ -18,6 +18,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.fuzzylite</groupId>
+            <artifactId>jfuzzylite</artifactId>
+            <version>6.0.1</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
@@ -51,7 +56,8 @@
     </dependencies>
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>12</java.version>
+        <tomcat.version>8.5.37</tomcat.version>
     </properties>
 
 

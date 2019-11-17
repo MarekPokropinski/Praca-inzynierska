@@ -5,7 +5,9 @@ import {
   TextField,
   DialogContent,
   DialogActions,
-  Button
+  Button,
+  Checkbox,
+  FormControlLabel
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -16,8 +18,8 @@ const useStyles = makeStyles({
 });
 
 export default function(props) {
-  const { onSubmit, open, onClose, title, text } = props;
-  const [name, setName] = useState("");
+  const { onSubmit, open, onClose, title, text, checkboxText } = props;
+  const [state, setState] = useState({ name: "", checked: false });
   const classes = useStyles();
 
   return (
@@ -26,14 +28,27 @@ export default function(props) {
       <DialogContent>
         <TextField
           label={text}
-          value={name}
-          onChange={event => setName(event.target.value)}
+          value={state.name}
+          onChange={event => setState({ ...state, name: event.target.value })}
         />
+        {checkboxText !== undefined ? (
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={state.checked}
+                onChange={event =>
+                  setState({ ...state, checked: event.target.checked })
+                }
+              />
+            }
+            label={checkboxText}
+          />
+        ) : null}
       </DialogContent>
       <DialogActions>
         <Button
           variant="outlined"
-          onClick={() => onSubmit(name)}
+          onClick={() => onSubmit(state.name, state.checked)}
           color="primary"
         >
           Create

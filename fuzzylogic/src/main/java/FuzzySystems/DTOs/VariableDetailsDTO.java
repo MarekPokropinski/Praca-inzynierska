@@ -9,15 +9,17 @@ public class VariableDetailsDTO {
     private long id;
     private String name;
     private List<LinguisticValue> values;
+    private boolean isInput;
 
-    public VariableDetailsDTO(long id, String name, List<LinguisticValue> values) {
+    public VariableDetailsDTO(long id, String name, List<LinguisticValue> values, boolean isInput) {
         this.id = id;
         this.name = name;
         this.values = values;
+        this.isInput = isInput;
     }
 
     public static VariableDetailsDTO fromEntity(LinguisticVariable variable) {
-        return new VariableDetailsDTO(variable.getId(), variable.getName(), variable.getValues());
+        return new VariableDetailsDTO(variable.getId(), variable.getName(), variable.getValues(), variable.isInput());
     }
 
     public long getId() {
@@ -30,5 +32,9 @@ public class VariableDetailsDTO {
 
     public List<LinguisticValue> getValues() {
         return values;
+    }
+
+    public boolean isInput() {
+        return isInput;
     }
 }

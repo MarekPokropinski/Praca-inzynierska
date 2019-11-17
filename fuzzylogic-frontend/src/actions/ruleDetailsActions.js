@@ -37,11 +37,11 @@ export const addConclusion = () => ({
   type: "ADD_CONCLUSION"
 });
 
-export const createRule = (premisesIds, conclusionIds) => ({
+export const createRule = (systemId, premisesIds, conclusionIds) => ({
   type: "CREATE_RULE",
   payload: {
     request: {
-      url: "/rules/",
+      url: `systems/${systemId}/rules/`,
       method: "POST",
       data: {
         premises: premisesIds,

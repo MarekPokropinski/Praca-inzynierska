@@ -1,8 +1,8 @@
-export const fetchRules = ()=>({
-    type: "FETCH_RULES",
-    payload: {
-        request: {
-          url: `/rules/`
-        }
-      }
-})
+export const fetchRules = systemId => ({
+  type: "FETCH_RULES",
+  payload: {
+    request: {
+      url: `systems/${systemId}/rules/`
+    }
+  }
+});

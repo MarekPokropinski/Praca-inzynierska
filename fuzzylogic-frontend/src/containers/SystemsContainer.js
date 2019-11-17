@@ -4,7 +4,7 @@ import { withStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import * as actionCreators from "../actions/rulesActions";
+import * as actionCreators from "../actions/systemsActions";
 
 const styles = theme => ({
   root: { width: "100%" },
@@ -29,41 +29,33 @@ const styles = theme => ({
 
 class RulesContainer extends React.Component {
   componentDidMount() {
-    const { system } = this.props;
-    if (!system) {
-      return;
-    }
-    this.props.fetchRules(system.id);
+    this.props.fetchSystems();
   }
 
   render() {
-    const { classes, rules } = this.props;
-    if (!rules) {
+    const { classes, systems } = this.props;
+    if (!systems) {
       return null;
     }
     return (
       <div className={classes.root}>
         <List className={classes.list} component="nav">
-          {rules.map(rule => (
+          {systems.map(system => (
             <ListItem
               className={classes.listItem}
               button
-              key={rule.id}
-              onClick={() => this.props.history.push(`${rule.id}/`)}
+              key={system.id}
+              onClick={() => this.props.selectSystem(system.id)}
             >
               <ListItemText
                 className={classes.text}
-                primary={rule.description}
-                secondary={rule.id}
+                primary={system.name}
+                secondary={system.id}
               />
             </ListItem>
           ))}
         </List>
-        <Fab
-          className={classes.fab}
-          color="primary"
-          onClick={() => this.props.history.push("new-rule")}
-        >
+        <Fab className={classes.fab} color="primary">
           <AddIcon />
         </Fab>
       </div>
@@ -72,7 +64,7 @@ class RulesContainer extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return { ...state.rules, system: state.systems.system };
+  return state.systems;
 };
 
 const mapDispatchToProps = dispatch =>
