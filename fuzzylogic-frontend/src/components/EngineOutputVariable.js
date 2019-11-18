@@ -22,7 +22,7 @@ const useStyles = makeStyles({
 });
 
 export default function EngineOutputVariable(props) {
-  const { name, plots, fuzzyValueText, value, range } = props;
+  const { name, plots, fuzzyValueText, value, range, fuzzyOutputPlot } = props;
 
   const classes = useStyles();
   const data = plots.map(plot => ({
@@ -33,6 +33,18 @@ export default function EngineOutputVariable(props) {
     name: plot.name,
     line: { shape: plots.shape }
   }));
+  data.push({
+    x: fuzzyOutputPlot.x,
+    y: fuzzyOutputPlot.y,
+    type: "scatter",
+    fill: "tozeroy",
+    mode: "",
+    name: fuzzyOutputPlot.name,
+    line: { shape: plots.shape },
+    marker: {
+      color: "rgb(0,255,0)"
+    }
+  });
 
   return (
     <div className={classes.root}>
@@ -60,12 +72,7 @@ export default function EngineOutputVariable(props) {
           }}
         />
         <div className={classes.slider}>
-          <Slider
-            // defaultValue={(range.first + range.second) / 2}
-            min={range.first}
-            max={range.second}
-            value={value}
-          />
+          <Slider min={range.first} max={range.second} value={value} />
         </div>
         <Typography color="textPrimary">μ(x)={fuzzyValueText}</Typography>
       </div>

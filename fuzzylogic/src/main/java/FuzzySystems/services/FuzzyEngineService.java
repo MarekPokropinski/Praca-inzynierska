@@ -2,6 +2,7 @@ package FuzzySystems.services;
 
 import FuzzySystems.DTOs.EngineOutputDTO;
 import FuzzySystems.DTOs.EngineVariableDTO;
+import FuzzySystems.DTOs.PlotDTO;
 import FuzzySystems.Exceptions.NotFoundException;
 import FuzzySystems.FuzzySets.FuzzyNumbers.FuzzyNumber;
 import FuzzySystems.FuzzySets.LinguisticValue;
@@ -112,27 +113,22 @@ public class FuzzyEngineService {
         return engine;
     }
 
-    public List<EngineVariableDTO> getOutput(long systemId,List<EngineVariableDTO> inputs) {
-        Engine engine = buildEngine(systemId);
-        for (EngineVariableDTO input : inputs) {
-            engine.setInputValue(input.getName(), input.getValue());
-        }
-        engine.getOutputVariable("Podlewaj").setRange(0, 12);
-        engine.process();
+    public PlotDTO getFuzzyOutputPlot(OutputVariable outputVariable, String name) {
+        var fuzzyOutput = outputVariable.fuzzyOutput();
 
-        System.out.println(engine.getOutputVariable("Podlewaj").fuzzyOutputValue());
-        System.out.println();
-        ArrayList<Double> points = new ArrayList<>();
-        for (float x = 0; x <= 12; x += 0.25) {
-            points.add(
-                    engine.getOutputVariable("Podlewaj").getTerm(0).membership(x)
-            );
+        double res = fuzzyOutput.range()/128;
+        List<Float> xs = new ArrayList<>();
+        List<Float> ys = new ArrayList<>();
+
+        for(double x = fuzzyOutput.getMinimum();x<=fuzzyOutput.getMaximum();x+=res) {
+            xs.add((float)x);
+            ys.add((float)fuzzyOutput.membership(x));
         }
-//        System.out.println(points);
-        System.out.println(engine.getOutputVariable("Podlewaj").getValue());
-        return engine.getOutputVariables().stream()
-                .map(outputVariable -> new EngineVariableDTO(outputVariable.getName(), engine.getOutputValue(outputVariable.getName())))
-                .collect(Collectors.toList());
+        double x = fuzzyOutput.getMaximum();
+        xs.add((float)x);
+        ys.add((float)fuzzyOutput.membership(x));
+
+        return new PlotDTO(xs,ys,name,"linear");
     }
 
     public EngineOutputDTO process(long systemId,List<EngineVariableDTO> inputs) throws NotFoundException {
@@ -171,11 +167,16 @@ public class FuzzyEngineService {
                         variablesService.getPlot(linguisticVariable.getId()),
                         outputVariable.fuzzyOutputValue(),
                         linguisticVariable.getRange(),
-                        outputVariable.getValue()
+                        outputVariable.getValue(),
+                        getFuzzyOutputPlot(outputVariable,"")
                 );
-//                outputVariable.fuzzyOutput().membership(0);
             }
         }
+
+        for(var rule : engine.getRuleBlock(0).getRules()) {
+            engineOutputDTO.addRule(rule.getText(),rule.getActivationDegree());
+        }
+
         return engineOutputDTO;
     }
 

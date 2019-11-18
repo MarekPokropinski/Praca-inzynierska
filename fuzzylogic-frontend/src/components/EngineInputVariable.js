@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Typography, Slider } from "@material-ui/core";
+import { Typography, Slider, Input } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Plot from "react-plotly.js";
 
@@ -20,6 +20,16 @@ const useStyles = makeStyles({
     padding: "0 20px"
   }
 });
+
+function handleValueChange(newValue, setValue, onChange, defaultValue) {
+  const value = parseFloat(newValue);
+  if (!isNaN(value)) {
+    onChange(value);
+    setValue(value);
+  } else {
+    setValue(newValue);
+  }
+}
 
 export default function EngineInputVariable(props) {
   const {
@@ -51,6 +61,8 @@ export default function EngineInputVariable(props) {
     line: { shape: plots.shape }
   });
 
+  const defaultValue = (range.first + range.second) / 2;
+
   return (
     <div className={classes.root}>
       <div className={classes.container}>
@@ -81,13 +93,34 @@ export default function EngineInputVariable(props) {
             // defaultValue={(range.first + range.second) / 2}
             min={range.first}
             max={range.second}
-            value={sliderValue}
-            onChange={(_event, newValue) => {
-              onChange(newValue);
-              setSliderValue(newValue);
-            }}
+            value={typeof sliderValue === "number" ? sliderValue : 0}
+            onChange={(_event, newValue) =>
+              handleValueChange(
+                newValue,
+                setSliderValue,
+                onChange,
+                defaultValue
+              )
+            }
           />
         </div>
+        <Input
+          value={sliderValue}
+          onChange={event =>
+            handleValueChange(
+              event.target.value,
+              setSliderValue,
+              onChange,
+              defaultValue
+            )
+          }
+          inputProps={{
+            step: 1,
+            min: range.first,
+            max: range.second,
+            type: "number"
+          }}
+        />
         <Typography color="textPrimary">μ(x)={fuzzyValueText}</Typography>
       </div>
     </div>

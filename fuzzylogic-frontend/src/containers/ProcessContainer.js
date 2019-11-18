@@ -4,7 +4,12 @@ import {
   ListItem,
   ListItemText,
   Typography,
-  Grid
+  Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
@@ -18,7 +23,14 @@ import EngineOutputVariable from "../components/EngineOutputVariable";
 // import * as actionCreators from "../actions/rulesActions";
 
 const styles = theme => ({
-  root: { width: "100%" }
+  root: { width: "100%" },
+  grid: {
+    textAlign: "center",
+    paddingBottom: "80px"
+  },
+  table: {
+    minWidth: 650
+  }
 });
 
 class ProcessContainer extends React.Component {
@@ -71,7 +83,7 @@ class ProcessContainer extends React.Component {
     }
     return (
       <div className={classes.root}>
-        <Grid container>
+        <Grid className={classes.grid} container>
           <Grid item xs={6}>
             <Typography color="textPrimary">Input variables</Typography>
             {data.inputs.map(input => (
@@ -88,6 +100,34 @@ class ProcessContainer extends React.Component {
               <EngineOutputVariable key={output.name} {...output} />
             ))}
           </Grid>
+          <Grid item xs={12}>
+            <Typography color="textPrimary">Rules</Typography>
+          </Grid>
+          <Table className={classes.table} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Rule</TableCell>
+                <TableCell align="right">Activation</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data.rules.map(rule => (
+                <TableRow
+                  style={{
+                    backgroundColor: `rgba(0,255,0,${rule.activationDegree})`
+                  }}
+                  key={rule.ruleText}
+                >
+                  <TableCell component="th" scope="row">
+                    {rule.ruleText}
+                  </TableCell>
+                  <TableCell align="right">
+                    {rule.activationDegree.toFixed(2)}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </Grid>
       </div>
     );
