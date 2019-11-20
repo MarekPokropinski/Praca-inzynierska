@@ -5,6 +5,7 @@ import FuzzySystems.DTOs.EngineVariableDTO;
 import FuzzySystems.DTOs.PlotDTO;
 import FuzzySystems.Exceptions.NotFoundException;
 import FuzzySystems.FuzzySets.FuzzyNumbers.FuzzyNumber;
+import FuzzySystems.FuzzySets.FuzzySystem;
 import FuzzySystems.FuzzySets.LinguisticValue;
 import FuzzySystems.FuzzySets.LinguisticVariable;
 import FuzzySystems.FuzzySets.FuzzyRule;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -30,17 +32,18 @@ import java.util.stream.Stream;
 public class FuzzyEngineService {
     private RulesService rulesService;
     private VariablesService variablesService;
+    private FuzzySystemService fuzzySystemService;
 
     @Autowired
-    public FuzzyEngineService(VariablesService variablesService, RulesService rulesService) {
+    public FuzzyEngineService(VariablesService variablesService, RulesService rulesService, FuzzySystemService fuzzySystemService) {
         this.rulesService = rulesService;
         this.variablesService = variablesService;
+        this.fuzzySystemService = fuzzySystemService;
     }
 
-    public Engine buildEngine(long systemId) {
-        System.out.println("Hello! Building engine!");
-//        Engine engine = null;
-        Engine engine = engine = new Engine("");
+    public Engine buildEngine(long systemId) throws NotFoundException {
+        FuzzySystem fuzzySystem = fuzzySystemService.getSystem(systemId).orElseThrow(NotFoundException::new);
+        Engine engine = engine = new Engine(fuzzySystem.getName());
         List<LinguisticVariable> variables = variablesService.getVariablesEntities(systemId);
         try {
             Variable variable;
@@ -68,8 +71,8 @@ public class FuzzyEngineService {
                     engine.addInputVariable((InputVariable) variable);
                 } else {
                     OutputVariable outputVariable = (OutputVariable) variable;
-                    outputVariable.setAggregation(new Maximum());
-                    outputVariable.setDefuzzifier(new Centroid());
+//                    outputVariable.setAggregation(new Maximum());
+//                    outputVariable.setDefuzzifier(new Centroid());
                     engine.addOutputVariable(outputVariable);
                 }
 
@@ -95,7 +98,7 @@ public class FuzzyEngineService {
             }
 
             engine.addRuleBlock(ruleBlock);
-            engine.configure("Minimum", "", "Minimum", "Maximum", "Centroid", "General");
+            engine.configure(fuzzySystem.getConjunction(), "", fuzzySystem.getImplication(), fuzzySystem.getAggregation(), fuzzySystem.getDefuzzifier(), "General");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -106,10 +109,7 @@ public class FuzzyEngineService {
         if (!engine.isReady(status)) {
             System.out.println("[engine error] engine is not ready:n" + status);
             return null;
-        } else {
-            System.out.println("Engine is ready");
         }
-
         return engine;
     }
 

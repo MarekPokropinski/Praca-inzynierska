@@ -56,16 +56,6 @@ public class VariablesService {
         return variableRepository.findById(id);
     }
 
-    public List<PlotDTO> getPlot2(long variableId) throws NotFoundException {
-        LinguisticVariable linguisticVariable = variableRepository.findById(variableId).orElseThrow(NotFoundException::new);
-        return linguisticVariable
-                .getValues()
-                .stream()
-                .filter(value -> Objects.nonNull(value.getNumber()))
-                .map(value -> value.getNumber().getPlot(value.getName()))
-                .collect(Collectors.toList());
-    }
-
     private PlotDTO createPlot(LinguisticValue linguisticValue) {
         var range = linguisticValue.getNumber().getRange();
         var term = linguisticValue.getNumber().getTerm(linguisticValue.getName());

@@ -15,6 +15,11 @@ export default function rules(state = { data: null, system: null }, action) {
         ...state,
         system: action.payload.data
       };
+    case "UPDATE_SYSTEM_SUCCESS":
+      return {
+        ...state,
+        system: action.payload.data
+      };
     default:
       return state;
   }

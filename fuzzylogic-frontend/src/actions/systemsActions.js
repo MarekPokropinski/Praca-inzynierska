@@ -15,3 +15,14 @@ export const selectSystem = id => ({
     }
   }
 });
+
+export const updateSystem = (id, data) => ({
+  type: "UPDATE_SYSTEM",
+  payload: {
+    request: {
+      method: "PATCH",
+      url: `/systems/${id}`,
+      data
+    }
+  }
+});

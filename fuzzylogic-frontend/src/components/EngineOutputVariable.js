@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, Slider } from "@material-ui/core";
+import { Typography, Slider, Input } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Plot from "react-plotly.js";
 
@@ -74,6 +74,16 @@ export default function EngineOutputVariable(props) {
         <div className={classes.slider}>
           <Slider min={range.first} max={range.second} value={value} />
         </div>
+        <Input
+          value={value}
+          disabled
+          inputProps={{
+            step: 1,
+            min: range.first,
+            max: range.second,
+            type: "number"
+          }}
+        />
         <Typography color="textPrimary">μ(x)={fuzzyValueText}</Typography>
       </div>
     </div>

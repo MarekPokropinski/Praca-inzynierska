@@ -14,6 +14,8 @@ public class VariableDTO {
     private long systemId;
     private Pair<Double, Double> range;
 
+    public VariableDTO(){}
+
     public VariableDTO(long systemId, long id, String name, List<ValueDTO> values, boolean isInput, Pair<Double, Double> range) {
         this(systemId, id, name, values, isInput);
         this.range = range;

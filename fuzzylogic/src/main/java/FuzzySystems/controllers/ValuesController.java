@@ -47,6 +47,14 @@ public class ValuesController {
                 return valuesService.putTriangularNumber(valueId, params.get(0), params.get(1), params.get(2));
             case "trapezoidal":
                 return valuesService.putTrapezoidalNumber(valueId, params.get(0), params.get(1), params.get(2), params.get(3));
+            case "gaussian":
+                return valuesService.putGaussianNumber(valueId, params.get(0), params.get(1));
+            case "bell":
+                return valuesService.putBellNumber(valueId, params.get(0), params.get(1), params.get(2));
+            case "pi":
+                return valuesService.putPiShapeNumber(valueId,params.get(0), params.get(1), params.get(2), params.get(3));
+            case "spike":
+                return valuesService.putSpikeNumber(valueId,params.get(0), params.get(1));
             default:
                 throw new BadRequestException();
         }

@@ -61,10 +61,6 @@ public class TrapezoidalNumber extends FuzzyNumber {
         return "trapezoidal";
     }
 
-    @Override
-    public PlotDTO getPlot(String name) {
-        return new PlotDTO(Arrays.asList(this.a, this.b, this.c, this.d), Arrays.asList(0.0f, 1.0f, 1.0f, 0.0f), name, "linear");
-    }
 
     @Override
     public Term getTerm(String name) {

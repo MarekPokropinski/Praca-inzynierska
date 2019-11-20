@@ -30,4 +30,9 @@ public class FuzzySystemsController {
         fuzzySystemService.createSystem(name);
     }
 
+    @PatchMapping("/{systemId}")
+    public FuzzySystem updateSystem(@PathVariable long systemId, @RequestBody FuzzySystem fuzzySystem) throws NotFoundException {
+        return fuzzySystemService.updateSystem(systemId, fuzzySystem);
+    }
+
 }

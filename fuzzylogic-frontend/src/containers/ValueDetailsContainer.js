@@ -65,7 +65,6 @@ class ValueDetailsContainer extends React.Component {
   handleApply() {
     const { newValue, UpdateNumber, fetchPlot, variable } = this.props;
 
-
     const { type, ...parameters } = newValue.number;
     const parametersArray = Object.values(parameters);
     UpdateNumber(newValue.id, type, parametersArray).then(() =>
@@ -80,6 +79,18 @@ class ValueDetailsContainer extends React.Component {
         break;
       case "trapezoidal":
         parameters = ["a", "b", "c", "d"];
+        break;
+      case "gaussian":
+        parameters = ["mean", "standard deviation"];
+        break;
+      case "bell":
+        parameters = ["center", "width", "slope"];
+        break;
+      case "pi":
+        parameters = ["bottom left", "top left", "top right", "bottom right"];
+        break;
+      case "spike":
+        parameters = ["center", "width"];
         break;
       default:
         parameters = [];
@@ -115,7 +126,6 @@ class ValueDetailsContainer extends React.Component {
       return null;
     }
 
-
     let number = newValue.number;
     this.validateParameters(number);
 
@@ -142,6 +152,10 @@ class ValueDetailsContainer extends React.Component {
             {/* <MenuItem value="none">none</MenuItem> */}
             <MenuItem value="triangular">triangular</MenuItem>
             <MenuItem value="trapezoidal">trapezoidal</MenuItem>
+            <MenuItem value="gaussian">gaussian</MenuItem>
+            <MenuItem value="bell">bell</MenuItem>
+            <MenuItem value="pi">pi shape</MenuItem>
+            <MenuItem value="spike">spike</MenuItem>
           </Select>
           <TriangularNumberForm number={number} onChange={setParams} />
           <Button

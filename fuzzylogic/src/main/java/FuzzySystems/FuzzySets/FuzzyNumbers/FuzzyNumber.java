@@ -13,14 +13,7 @@ public abstract class FuzzyNumber {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
-    //    public FuzzyNumber(MembershipFunction membershipFunction) {
-//        super(membershipFunction);
-//        // check if valid membership function
-//    }
     public abstract String getType();
-
-    public abstract PlotDTO getPlot(String name);
 
     @JsonIgnore
     public abstract Term getTerm(String name);
