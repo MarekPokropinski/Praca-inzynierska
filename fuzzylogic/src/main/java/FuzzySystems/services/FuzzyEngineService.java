@@ -5,13 +5,11 @@ import FuzzySystems.DTOs.EngineVariableDTO;
 import FuzzySystems.DTOs.PlotDTO;
 import FuzzySystems.Exceptions.NotFoundException;
 import FuzzySystems.FuzzySets.FuzzyNumbers.FuzzyNumber;
+import FuzzySystems.FuzzySets.FuzzyRule;
 import FuzzySystems.FuzzySets.FuzzySystem;
 import FuzzySystems.FuzzySets.LinguisticValue;
 import FuzzySystems.FuzzySets.LinguisticVariable;
-import FuzzySystems.FuzzySets.FuzzyRule;
 import com.fuzzylite.Engine;
-import com.fuzzylite.defuzzifier.Centroid;
-import com.fuzzylite.norm.s.Maximum;
 import com.fuzzylite.rule.Rule;
 import com.fuzzylite.rule.RuleBlock;
 import com.fuzzylite.term.Constant;
@@ -23,7 +21,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -115,23 +112,23 @@ public class FuzzyEngineService {
 
     public PlotDTO getFuzzyOutputPlot(OutputVariable outputVariable, String name) {
         var fuzzyOutput = outputVariable.fuzzyOutput();
-
-        double res = fuzzyOutput.range()/128;
+        long steps = 128;
+        double res = fuzzyOutput.range() / steps;
         List<Float> xs = new ArrayList<>();
         List<Float> ys = new ArrayList<>();
-
-        for(double x = fuzzyOutput.getMinimum();x<=fuzzyOutput.getMaximum();x+=res) {
-            xs.add((float)x);
-            ys.add((float)fuzzyOutput.membership(x));
+        double x = fuzzyOutput.getMinimum();
+        for (int i = 0; i < steps; i++, x += res) {//double x = fuzzyOutput.getMinimum();x<=fuzzyOutput.getMaximum();x+=res) {
+            xs.add((float) x);
+            ys.add((float) fuzzyOutput.membership(x));
         }
-        double x = fuzzyOutput.getMaximum();
-        xs.add((float)x);
-        ys.add((float)fuzzyOutput.membership(x));
+        x = fuzzyOutput.getMaximum();
+        xs.add((float) x);
+        ys.add((float) fuzzyOutput.membership(x));
 
-        return new PlotDTO(xs,ys,name,"linear");
+        return new PlotDTO(xs, ys, name, "linear");
     }
 
-    public EngineOutputDTO process(long systemId,List<EngineVariableDTO> inputs) throws NotFoundException {
+    public EngineOutputDTO process(long systemId, List<EngineVariableDTO> inputs) throws NotFoundException {
         Engine engine = buildEngine(systemId);
         for (EngineVariableDTO input : inputs) {
             engine.setInputValue(input.getName(), input.getValue());
@@ -141,14 +138,14 @@ public class FuzzyEngineService {
         EngineOutputDTO engineOutputDTO = new EngineOutputDTO();
 
         List<LinguisticVariable> variables = variablesService.getVariablesEntities(systemId);
-        for(var linguisticVariable : variables){
-            if(linguisticVariable.isInput()) {
+        for (var linguisticVariable : variables) {
+            if (linguisticVariable.isInput()) {
                 Double value = inputs.stream()
-                        .filter(input->input.getName().equals(linguisticVariable.getName()))
-                        .map(input->input.getValue())
+                        .filter(input -> input.getName().equals(linguisticVariable.getName()))
+                        .map(input -> input.getValue())
                         .findAny()
                         .orElse(null);
-                if(value==null) {
+                if (value == null) {
                     continue;
                 }
                 var inputVariable = engine.getInputVariable(linguisticVariable.getName());
@@ -156,7 +153,7 @@ public class FuzzyEngineService {
                         linguisticVariable.getName(),
                         variablesService.getPlot(linguisticVariable.getId()),
                         inputVariable.fuzzyInputValue(),
-                        inputVariable.getTerms().stream().map(term->term.membership(value)).collect(Collectors.toList()),
+                        inputVariable.getTerms().stream().map(term -> term.membership(value)).collect(Collectors.toList()),
                         linguisticVariable.getRange(),
                         value
                 );
@@ -168,13 +165,13 @@ public class FuzzyEngineService {
                         outputVariable.fuzzyOutputValue(),
                         linguisticVariable.getRange(),
                         outputVariable.getValue(),
-                        getFuzzyOutputPlot(outputVariable,"")
+                        getFuzzyOutputPlot(outputVariable, "")
                 );
             }
         }
 
-        for(var rule : engine.getRuleBlock(0).getRules()) {
-            engineOutputDTO.addRule(rule.getText(),rule.getActivationDegree());
+        for (var rule : engine.getRuleBlock(0).getRules()) {
+            engineOutputDTO.addRule(rule.getText(), rule.getActivationDegree());
         }
 
         return engineOutputDTO;

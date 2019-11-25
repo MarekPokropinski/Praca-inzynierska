@@ -9,22 +9,24 @@ import { InputLabel, TextField } from "@material-ui/core";
 //   return parsed;
 // }
 
-
-
 export default function TriangularNumberForm(props) {
   const { onChange, number } = props;
-  let ret = []
-    for (let key in number) {
-      if(key!=='type') {
-        ret.push(
-          <TextField
+  let ret = [];
+  for (let key in number) {
+    if (key !== "type") {
+      ret.push(
+        <TextField
           value={number[key]}
           label={key}
-          onChange={event => onChange({...number,[key]:event.target.value})}
+          onChange={event => onChange({ ...number, [key]: event.target.value })}
           key={key}
+          inputProps={{
+            step: 1,
+            type: "number"
+          }}
         />
-        )
-      }
+      );
     }
-    return ret;
+  }
+  return ret;
 }

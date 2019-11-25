@@ -20,10 +20,10 @@ import java.util.stream.Collectors;
 @Service
 public class VariablesService {
     @Autowired
-    public VariableRepository variableRepository;
+    private VariableRepository variableRepository;
 
     @Autowired
-    public FuzzySystemService fuzzySystemService;
+    private FuzzySystemService fuzzySystemService;
 
     public List<VariableDTO> getVariables(long systemId) {
         return variableRepository.findByFuzzySystemId(systemId).stream().map(VariableDTO::fromEntity).collect(Collectors.toList());
@@ -45,9 +45,9 @@ public class VariablesService {
         return VariableDetailsDTO.fromEntity(linguisticVariable);
     }
 
-    public void updateVariable(long fuzzySystemId, long variableId, String variableName, boolean isInput) throws NotFoundException {
-        variableRepository.findById(variableId).orElseThrow(NotFoundException::new);
-        FuzzySystem fuzzySystem = fuzzySystemService.getSystem(fuzzySystemId).orElseThrow(NotFoundException::new);
+    public void updateVariable(long variableId, String variableName, boolean isInput) throws NotFoundException {
+        LinguisticVariable oldVariable = variableRepository.findById(variableId).orElseThrow(NotFoundException::new);
+        FuzzySystem fuzzySystem = oldVariable.getFuzzySystem();
         LinguisticVariable linguisticVariable = new LinguisticVariable(fuzzySystem, variableId, variableName, isInput);
         variableRepository.save(linguisticVariable);
     }
@@ -60,19 +60,19 @@ public class VariablesService {
         var range = linguisticValue.getNumber().getRange();
         var term = linguisticValue.getNumber().getTerm(linguisticValue.getName());
 
-        double res = (range.getSecond()-range.getFirst())/128;
+        double res = (range.getSecond() - range.getFirst()) / 128;
         List<Float> xs = new ArrayList<>();
         List<Float> ys = new ArrayList<>();
 
-        for(double x = range.getFirst();x<=range.getSecond();x+=res) {
-            xs.add((float)x);
-            ys.add((float)term.membership(x));
+        for (double x = range.getFirst(); x <= range.getSecond(); x += res) {
+            xs.add((float) x);
+            ys.add((float) term.membership(x));
         }
         double x = range.getSecond();
-        xs.add((float)x);
-        ys.add((float)term.membership(x));
+        xs.add((float) x);
+        ys.add((float) term.membership(x));
 
-        return new PlotDTO(xs,ys,linguisticValue.getName(),"linear");
+        return new PlotDTO(xs, ys, linguisticValue.getName(), "linear");
     }
 
     public List<PlotDTO> getPlot(long variableId) throws NotFoundException {
@@ -85,4 +85,11 @@ public class VariablesService {
                 .collect(Collectors.toList());
     }
 
+    public LinguisticVariable createVariable(FuzzySystem fuzzySystem, String name, boolean isInput) {
+        return variableRepository.save(new LinguisticVariable(fuzzySystem, name, isInput));
+    }
+
+    public void deleteVariable(long variableId) {
+        variableRepository.deleteById(variableId);
+    }
 }

@@ -1,6 +1,7 @@
 package FuzzySystems.FuzzySets.FuzzyNumbers;
 
 import FuzzySystems.DTOs.PlotDTO;
+import FuzzySystems.FuzzySets.LinguisticValue;
 import com.fuzzylite.term.Term;
 import com.fuzzylite.term.Trapezoid;
 import org.springframework.data.util.Pair;
@@ -17,12 +18,14 @@ public class TrapezoidalNumber extends FuzzyNumber {
     public TrapezoidalNumber() {
     }
 
-    public TrapezoidalNumber(float a, float b, float c, float d) {
+    public TrapezoidalNumber(LinguisticValue linguisticValue, float a, float b, float c, float d) {
+        super(linguisticValue);
         this.a = a;
         this.b = b;
         this.c = c;
         this.d = d;
     }
+
 
     public float getA() {
         return a;

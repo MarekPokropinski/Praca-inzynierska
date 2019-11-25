@@ -72,7 +72,7 @@ class RuleDetailsContainer extends React.Component {
     } = this.props;
     this.ruleId = this.props.match.params.rule;
     this.ruleId = this.ruleId === "new-rule" ? null : this.ruleId;
-    if(!system) {
+    if (!system) {
       return;
     }
     fetchVariables(system.id);
@@ -134,7 +134,7 @@ class RuleDetailsContainer extends React.Component {
           </Grid>
           <Grid item xs={10} sm={5}>
             <PremisesList
-              title="Premises"
+              title="Antecedent"
               list={rule.premises}
               variables={variables.filter(variable => variable.input)}
               onChange={modifyPremise}
@@ -148,7 +148,7 @@ class RuleDetailsContainer extends React.Component {
           </Grid>
           <Grid item xs={10} sm={5}>
             <PremisesList
-              title="Conclusions"
+              title="Consequent"
               list={rule.conclusions}
               variables={variables.filter(variable => !variable.input)}
               onChange={modifyConclusion}

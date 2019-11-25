@@ -1,6 +1,10 @@
 package FuzzySystems.FuzzySets;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class FuzzySystem {
@@ -8,11 +12,19 @@ public class FuzzySystem {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "fuzzySystem")
+    private List<LinguisticVariable> linguisticVariables;
+
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "fuzzySystem")
+    private List<FuzzyRule> fuzzyRules;
+
     @Column(unique = true)
     private String name;
 
     private String conjunction;
-//    private String disjunction;
+    //    private String disjunction;
     private String implication;
     private String aggregation;
     private String defuzzifier;

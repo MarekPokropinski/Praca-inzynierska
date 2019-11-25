@@ -10,6 +10,7 @@
     "plotly.js": "^1.50.0",
     "plotly.js-basic-dist-min": "^1.50.0",
     "react": "^16.10.2",
+    "react-csv-reader": "^2.0.2",
     "react-dom": "^16.10.2",
     "react-plotly.js": "^2.3.0",
     "react-redux": "^7.1.1",

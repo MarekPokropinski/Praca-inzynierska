@@ -1,6 +1,7 @@
 package FuzzySystems.FuzzySets.FuzzyNumbers;
 
 import FuzzySystems.DTOs.PlotDTO;
+import FuzzySystems.FuzzySets.LinguisticValue;
 import com.fuzzylite.term.Term;
 import com.fuzzylite.term.Triangle;
 import org.springframework.data.util.Pair;
@@ -15,11 +16,22 @@ public class TriangularNumber extends FuzzyNumber {
     public TriangularNumber() {
     }
 
-    public TriangularNumber(float start, float middle, float end) {
-        this.a = start;
-        this.b = middle;
-        this.c = end;
+    public TriangularNumber(LinguisticValue linguisticValue) {
+        super(linguisticValue);
     }
+
+    public TriangularNumber(LinguisticValue linguisticValue, float a, float b, float c) {
+        super(linguisticValue);
+        this.a = a;
+        this.b = b;
+        this.c = c;
+    }
+
+//    public TriangularNumber(float start, float middle, float end) {
+//        this.a = start;
+//        this.b = middle;
+//        this.c = end;
+//    }
 
     public float getA() {
         return a;

@@ -1,5 +1,6 @@
 package FuzzySystems.FuzzySets.FuzzyNumbers;
 
+import FuzzySystems.FuzzySets.LinguisticValue;
 import com.fuzzylite.term.Spike;
 import com.fuzzylite.term.Term;
 import org.springframework.data.util.Pair;
@@ -14,11 +15,11 @@ public class SpikeNumber extends FuzzyNumber {
     public SpikeNumber() {
     }
 
-    public SpikeNumber(double center, double width) {
+    public SpikeNumber(LinguisticValue linguisticValue, double center, double width) {
+        super(linguisticValue);
         this.center = center;
         this.width = width;
     }
-
 
     @Override
     public String getType() {

@@ -1,4 +1,7 @@
-export default function value(state = { data: {} }, action) {
+export default function value(
+  state = { data: {}, displayEditValueDialog: false },
+  action
+) {
   switch (action.type) {
     case "FETCH_VALUE_SUCCESS":
       return {
@@ -22,6 +25,11 @@ export default function value(state = { data: {} }, action) {
           ...state.newValue,
           number: { ...state.newValue.number, ...action.payload }
         }
+      };
+    case "DISPLAY_EDIT_VALUE_DIALOG":
+      return {
+        ...state,
+        displayEditValueDialog: action.payload
       };
     default:
       return state;

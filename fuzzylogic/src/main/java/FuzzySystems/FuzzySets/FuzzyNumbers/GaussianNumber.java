@@ -1,5 +1,6 @@
 package FuzzySystems.FuzzySets.FuzzyNumbers;
 
+import FuzzySystems.FuzzySets.LinguisticValue;
 import com.fuzzylite.term.Gaussian;
 import com.fuzzylite.term.Term;
 import org.springframework.data.util.Pair;
@@ -11,7 +12,8 @@ public class GaussianNumber extends FuzzyNumber {
     private double mean;
     private double stddev;
 
-    public GaussianNumber(double mean, double stddev) {
+    public GaussianNumber(LinguisticValue linguisticValue, double mean, double stddev) {
+        super(linguisticValue);
         this.mean = mean;
         this.stddev = stddev;
     }

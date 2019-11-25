@@ -35,6 +35,11 @@ public class ValuesController {
         return valuesService.getValueDetails(valueId).orElseThrow(NotFoundException::new);
     }
 
+    @PutMapping("/{valueId}")
+    public LinguisticValue updateValue(@PathVariable long valueId, @RequestBody String name)throws NotFoundException {
+        return valuesService.updateValue(valueId, name);
+    }
+
     @GetMapping("/{valueId}/number")
     public FuzzyNumber getFuzzyNumber(@PathVariable long valueId) throws NotFoundException {
         return valuesService.getFuzzyNumber(valueId);
@@ -58,5 +63,9 @@ public class ValuesController {
             default:
                 throw new BadRequestException();
         }
+    }
+    @DeleteMapping("/{valueId}")
+    public void deleteValue(@PathVariable long valueId) {
+        valuesService.deleteValue(valueId);
     }
 }

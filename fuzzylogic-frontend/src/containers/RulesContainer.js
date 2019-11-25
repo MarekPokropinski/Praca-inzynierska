@@ -1,5 +1,12 @@
 import React from "react";
-import { List, ListItem, ListItemText, Fab } from "@material-ui/core";
+import {
+  List,
+  ListItem,
+  ListItemText,
+  Fab,
+  Button,
+  ListItemSecondaryAction
+} from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
 import { connect } from "react-redux";
@@ -29,11 +36,16 @@ const styles = theme => ({
 
 class RulesContainer extends React.Component {
   componentDidMount() {
-    const { system } = this.props;
+    const { system, fetchRules } = this.props;
     if (!system) {
       return;
     }
-    this.props.fetchRules(system.id);
+    fetchRules(system.id);
+  }
+
+  handleClickDelete(id) {
+    const { deleteRule, system, fetchRules } = this.props;
+    deleteRule(id).then(() => fetchRules(system.id));
   }
 
   render() {
@@ -56,6 +68,11 @@ class RulesContainer extends React.Component {
                 primary={rule.description}
                 secondary={rule.id}
               />
+              <ListItemSecondaryAction>
+                <Button onClick={() => this.handleClickDelete(rule.id)}>
+                  delete
+                </Button>
+              </ListItemSecondaryAction>
             </ListItem>
           ))}
         </List>

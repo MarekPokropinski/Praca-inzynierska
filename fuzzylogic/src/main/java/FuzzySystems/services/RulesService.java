@@ -106,4 +106,12 @@ public class RulesService {
                 .map(this::buildDescription)
                 .collect(Collectors.toList());
     }
+
+    public void createRule(FuzzyRule rule){
+        fuzzyRulesRepository.save(rule);
+    }
+
+    public void deleteRule(long ruleId) {
+        fuzzyRulesRepository.deleteById(ruleId);
+    }
 }

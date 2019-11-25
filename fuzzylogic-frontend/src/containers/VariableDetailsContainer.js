@@ -6,7 +6,8 @@ import {
   Breadcrumbs,
   Typography,
   Fab,
-  Button
+  Button,
+  ListItemSecondaryAction
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
@@ -51,6 +52,7 @@ class VariableDetailsContainer extends React.Component {
     super();
     this.handleAddValue = this.handleAddValue.bind(this);
     this.refresh = this.refresh.bind(this);
+    this.handleEditVariable = this.handleEditVariable.bind(this);
   }
 
   refresh() {
@@ -69,6 +71,19 @@ class VariableDetailsContainer extends React.Component {
     await createValue(variable.id, name);
     displayAddValueDialog(false);
   }
+  handleClickDelete(id) {
+    const { deleteValue } = this.props;
+    deleteValue(id).then(() => {
+      this.refresh();
+    });
+  }
+
+  async handleEditVariable(name, isInput) {
+    const { editVariable, setDisplayEditVariableDialog, variable } = this.props;
+    await editVariable(variable.id, name, isInput);
+    setDisplayEditVariableDialog(false);
+    this.refresh();
+  }
 
   render() {
     const {
@@ -76,12 +91,14 @@ class VariableDetailsContainer extends React.Component {
       variable,
       plot,
       displayCreateValueDialog,
-      displayAddValueDialog
+      displayAddValueDialog,
+      displayEditVariableDialog,
+      setDisplayEditVariableDialog
     } = this.props;
     if (!variable || !variable.values) {
       return null;
     }
-    if(!plot){
+    if (!plot) {
       return null;
     }
     if (variable.id !== parseInt(this.props.match.params.id, 10)) {
@@ -96,10 +113,15 @@ class VariableDetailsContainer extends React.Component {
           <Typography color="textPrimary">{variable.name}</Typography>
         </Breadcrumbs>
 
-        <Plot
-          name={variable.name}
-          values={plot}
-        />
+        <Plot name={variable.name} values={plot} />
+
+        <Button
+          className={classes.button}
+          variant="contained"
+          onClick={() => setDisplayEditVariableDialog(true)}
+        >
+          Edit variable
+        </Button>
 
         <Button
           className={classes.button}
@@ -118,6 +140,11 @@ class VariableDetailsContainer extends React.Component {
               onClick={() => this.props.history.push(`${value.id}/`)}
             >
               <ListItemText className={classes.text} primary={value.name} />
+              <ListItemSecondaryAction>
+                <Button onClick={() => this.handleClickDelete(value.id)}>
+                  delete
+                </Button>
+              </ListItemSecondaryAction>
             </ListItem>
           ))}
         </List>
@@ -129,6 +156,15 @@ class VariableDetailsContainer extends React.Component {
           title="Create linguistic value"
           text="value name"
         />
+
+        <CreateObjectDialog
+          open={displayEditVariableDialog}
+          onClose={() => setDisplayEditVariableDialog(false)}
+          onSubmit={this.handleEditVariable}
+          title="Edit linguistic variable"
+          text="New variable name"
+          checkboxText="Is input"
+        />
       </div>
     );
   }
@@ -138,6 +174,7 @@ const mapStateToProps = state => {
   return {
     variable: state.variable.data,
     displayCreateValueDialog: state.variable.displayCreateValueDialog,
+    displayEditVariableDialog: state.variable.displayEditVariableDialog,
     plot: state.variable.plot
   };
 };

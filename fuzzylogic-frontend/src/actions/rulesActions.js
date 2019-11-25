@@ -6,3 +6,13 @@ export const fetchRules = systemId => ({
     }
   }
 });
+
+export const deleteRule = id => ({
+  type: "DELETE_RULE",
+  payload: {
+    request: {
+      url: `/rules/${id}`,
+      method: "DELETE"
+    }
+  }
+});

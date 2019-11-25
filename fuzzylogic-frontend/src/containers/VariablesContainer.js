@@ -1,5 +1,12 @@
 import React from "react";
-import { List, ListItem, ListItemText, Fab } from "@material-ui/core";
+import {
+  List,
+  ListItem,
+  ListItemText,
+  Fab,
+  ListItemSecondaryAction,
+  Button
+} from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
 import { connect } from "react-redux";
@@ -35,17 +42,28 @@ class VariablesContainer extends React.Component {
   }
 
   componentDidMount() {
-    const { system } = this.props;
+    const { system, fetchVariables } = this.props;
     if (!system) {
       return;
     }
-    this.props.fetchVariables(system.id);
+    fetchVariables(system.id);
   }
 
   handleAddVariable(name, isInput) {
-    const { system } = this.props;
-    this.props.createVariable(system.id, name, isInput).then(() => {
-      this.props.displayDialog(false);
+    const { system, createVariable, displayDialog } = this.props;
+    createVariable(system.id, name, isInput).then(() => {
+      displayDialog(false);
+    });
+  }
+
+  handleClickDelete(id) {
+    const { deleteVariable, system, fetchVariables } = this.props;
+    deleteVariable(id).then(response => {
+      if (response.type === "DELETE_VARIABLE_FAIL") {
+        alert("Cannot delete variable. Check if it is not used in any rules.");
+      } else {
+        fetchVariables(system.id);
+      }
     });
   }
 
@@ -78,6 +96,11 @@ class VariablesContainer extends React.Component {
                         .reduce((prev, current) => prev + ", " + current)
                 }
               />
+              <ListItemSecondaryAction>
+                <Button onClick={() => this.handleClickDelete(variable.id)}>
+                  delete
+                </Button>
+              </ListItemSecondaryAction>
             </ListItem>
           ))}
         </List>

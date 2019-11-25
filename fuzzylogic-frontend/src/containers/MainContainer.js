@@ -130,7 +130,7 @@ class MainContainer extends React.Component {
                 ]
               : null}
           </Tabs>
-          <FormGroup row>
+          {/* <FormGroup row>
             <FormControlLabel
               className={classes.switch}
               label="darkmode"
@@ -143,7 +143,7 @@ class MainContainer extends React.Component {
                 />
               }
             />
-          </FormGroup>
+          </FormGroup> */}
         </div>
         <div className={classes.tabpanel}>
           <Router history={this.history}>

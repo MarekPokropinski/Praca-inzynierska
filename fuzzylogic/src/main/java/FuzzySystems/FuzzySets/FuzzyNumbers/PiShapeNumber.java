@@ -1,5 +1,6 @@
 package FuzzySystems.FuzzySets.FuzzyNumbers;
 
+import FuzzySystems.FuzzySets.LinguisticValue;
 import com.fuzzylite.term.PiShape;
 import com.fuzzylite.term.Term;
 import org.springframework.data.util.Pair;
@@ -16,7 +17,8 @@ public class PiShapeNumber extends FuzzyNumber {
     public PiShapeNumber() {
     }
 
-    public PiShapeNumber(double bottomLeft, double topLeft, double topRight, double bottomRight) {
+    public PiShapeNumber(LinguisticValue linguisticValue, double bottomLeft, double topLeft, double topRight, double bottomRight) {
+        super(linguisticValue);
         this.bottomLeft = bottomLeft;
         this.topLeft = topLeft;
         this.topRight = topRight;

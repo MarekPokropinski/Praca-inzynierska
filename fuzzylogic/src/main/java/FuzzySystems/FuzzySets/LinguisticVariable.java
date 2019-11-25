@@ -1,6 +1,8 @@
 package FuzzySystems.FuzzySets;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.util.Pair;
 
 import javax.persistence.*;
@@ -13,12 +15,13 @@ public class LinguisticVariable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String name;
-    @OneToMany(mappedBy = "linguisticVariable", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "linguisticVariable", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<LinguisticValue> values;
-    @Column(nullable = true)
+
     private boolean isInput;
 
     @ManyToOne
+    @JoinColumn
     private FuzzySystem fuzzySystem;
 
     public LinguisticVariable() {
@@ -45,6 +48,10 @@ public class LinguisticVariable {
         return name;
     }
 
+    public void setValues(List<LinguisticValue> values) {
+        this.values = values;
+    }
+
     public List<LinguisticValue> getValues() {
         return values;
     }
@@ -60,7 +67,7 @@ public class LinguisticVariable {
     @JsonIgnore
     public Pair<Double,Double> getRange() {
         return values.stream()
-                .map(value->value.getNumber().getRange())
+                .map(value->value.getNumber()==null?Pair.of(0.0,0.0):value.getNumber().getRange())
                 .reduce((range,acc)->Pair.of(Math.min(range.getFirst(),acc.getFirst()),Math.max(range.getSecond(),acc.getSecond())))
                 .orElse(Pair.of(0.0,0.0));
     }

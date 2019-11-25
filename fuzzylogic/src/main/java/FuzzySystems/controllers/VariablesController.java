@@ -6,6 +6,8 @@ import FuzzySystems.DTOs.VariableDetailsDTO;
 import FuzzySystems.Exceptions.NotFoundException;
 import FuzzySystems.services.VariablesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,7 +34,17 @@ public class VariablesController {
 
     @PutMapping("variables/{variableId}")
     public void updateVariable(@PathVariable long variableId, @RequestBody VariableDTO variable) throws NotFoundException {
-        variablesService.updateVariable(variable.getSystemId(), variableId, variable.getName(), variable.isInput());
+        variablesService.updateVariable(variableId, variable.getName(), variable.isInput());
+    }
+
+    @DeleteMapping("variables/{variableId}")
+    public ResponseEntity deleteVariable(@PathVariable long variableId) {
+        try{
+            variablesService.deleteVariable(variableId);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch(Exception e) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("variables/{variableId}/plot")

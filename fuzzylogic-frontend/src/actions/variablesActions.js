@@ -22,3 +22,13 @@ export const displayDialog = display => ({
   type: "DISPLAY_DIALOG",
   payload: display
 });
+
+export const deleteVariable = id => ({
+  type: "DELETE_VARIABLE",
+  payload: {
+    request: {
+      url: `/variables/${id}`,
+      method: "DELETE"
+    }
+  }
+});

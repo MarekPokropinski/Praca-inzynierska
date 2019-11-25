@@ -1,5 +1,6 @@
 package FuzzySystems.FuzzySets.FuzzyNumbers;
 
+import FuzzySystems.FuzzySets.LinguisticValue;
 import com.fuzzylite.term.Bell;
 import com.fuzzylite.term.Term;
 import org.springframework.data.util.Pair;
@@ -15,11 +16,13 @@ public class BellNumber extends FuzzyNumber {
     public BellNumber() {
     }
 
-    public BellNumber(double center, double width, double slope) {
+    public BellNumber(LinguisticValue linguisticValue, double center, double width, double slope) {
+        super(linguisticValue);
         this.center = center;
         this.width = width;
         this.slope = slope;
     }
+
 
     @Override
     public String getType() {

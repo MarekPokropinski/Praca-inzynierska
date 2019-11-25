@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -20,9 +19,9 @@ import java.util.stream.Collectors;
 public class ValuesService {
 
     @Autowired
-    public VariablesService variablesService;
+    private VariablesService variablesService;
     @Autowired
-    ValueRepository valueRepository;
+    private ValueRepository valueRepository;
     @Autowired
     private FuzzyNumberRepository fuzzyNumberRepository;
 
@@ -46,128 +45,82 @@ public class ValuesService {
         return valueRepository.findById(valueId).orElseThrow(NotFoundException::new).getNumber();
     }
 
-    public TriangularNumber putTriangularNumber(long valueId, float a, float b, float c) throws NotFoundException {
-        LinguisticValue value = valueRepository.findById(valueId).orElseThrow(NotFoundException::new);
-        TriangularNumber fuzzyNumber;
+    private FuzzyNumber putNumber(LinguisticValue linguisticValue, FuzzyNumber fuzzyNumber) {
+        if (linguisticValue.getNumber() != null) {
+            fuzzyNumber.setId(linguisticValue.getNumber().getId());
+        }
 
+        fuzzyNumber = fuzzyNumberRepository.save(fuzzyNumber);
+        return fuzzyNumber;
+    }
+
+    public FuzzyNumber putTriangularNumber(long valueId, float a, float b, float c) throws NotFoundException {
+        LinguisticValue value = valueRepository.findById(valueId).orElseThrow(NotFoundException::new);
         validateNumberType(value, "triangular");
-
-
-        fuzzyNumber = Objects.isNull(value.getNumber()) ? new TriangularNumber() : (TriangularNumber) value.getNumber();
-
-        fuzzyNumber.setA(a);
-        fuzzyNumber.setB(b);
-        fuzzyNumber.setC(c);
-
-        fuzzyNumber = fuzzyNumberRepository.save(fuzzyNumber);
-        value.setNumber(fuzzyNumber);
-        valueRepository.save(value);
-
-        return fuzzyNumber;
+        TriangularNumber fuzzyNumber = new TriangularNumber(value, a, b, c);
+        return putNumber(value, fuzzyNumber);
     }
 
-    public TrapezoidalNumber putTrapezoidalNumber(long valueId, float a, float b, float c, float d) throws NotFoundException {
+    public FuzzyNumber putTrapezoidalNumber(long valueId, float a, float b, float c, float d) throws NotFoundException {
         LinguisticValue value = valueRepository.findById(valueId).orElseThrow(NotFoundException::new);
-        TrapezoidalNumber fuzzyNumber;
-
         value = validateNumberType(value, "trapezoidal");
-
-        fuzzyNumber = Objects.isNull(value.getNumber()) ? new TrapezoidalNumber() : (TrapezoidalNumber) value.getNumber();
-
-        fuzzyNumber.setA(a);
-        fuzzyNumber.setB(b);
-        fuzzyNumber.setC(c);
-        fuzzyNumber.setD(d);
-
-        fuzzyNumber = fuzzyNumberRepository.save(fuzzyNumber);
-        value.setNumber(fuzzyNumber);
-        valueRepository.save(value);
-
-        return fuzzyNumber;
+        TrapezoidalNumber fuzzyNumber = new TrapezoidalNumber(value, a, b, c, d);
+        return putNumber(value, fuzzyNumber);
     }
 
-    public GaussianNumber putGaussianNumber(long valueId, float mean, float stddev) throws NotFoundException {
-        LinguisticValue value = valueRepository.findById(valueId).orElseThrow(NotFoundException::new);
-        GaussianNumber fuzzyNumber;
 
+    public FuzzyNumber putGaussianNumber(long valueId, float mean, float stddev) throws NotFoundException {
+        LinguisticValue value = valueRepository.findById(valueId).orElseThrow(NotFoundException::new);
         value = validateNumberType(value, "gaussian");
-
-        fuzzyNumber = Objects.isNull(value.getNumber()) ? new GaussianNumber() : (GaussianNumber) value.getNumber();
-
-        fuzzyNumber.setMean(mean);
-        fuzzyNumber.setStddev(stddev);
-
-        fuzzyNumber = fuzzyNumberRepository.save(fuzzyNumber);
-        value.setNumber(fuzzyNumber);
-        valueRepository.save(value);
-
-        return fuzzyNumber;
+        GaussianNumber fuzzyNumber = new GaussianNumber(value, mean, stddev);
+        return putNumber(value, fuzzyNumber);
     }
 
-    public BellNumber putBellNumber(long valueId, double center, double width, double slope) throws NotFoundException {
+    public FuzzyNumber putBellNumber(long valueId, double center, double width, double slope) throws NotFoundException {
         LinguisticValue value = valueRepository.findById(valueId).orElseThrow(NotFoundException::new);
-        BellNumber fuzzyNumber;
-
         value = validateNumberType(value, "bell");
-
-        fuzzyNumber = Objects.isNull(value.getNumber()) ? new BellNumber() : (BellNumber) value.getNumber();
-
-        fuzzyNumber.setCenter(center);
-        fuzzyNumber.setSlope(slope);
-        fuzzyNumber.setWidth(width);
-
-        fuzzyNumber = fuzzyNumberRepository.save(fuzzyNumber);
-        value.setNumber(fuzzyNumber);
-        valueRepository.save(value);
-
-        return fuzzyNumber;
+        BellNumber fuzzyNumber = new BellNumber(value, center, width, slope);
+        return putNumber(value, fuzzyNumber);
     }
 
-    public PiShapeNumber putPiShapeNumber(long valueId, double bottomLeft, double topLeft, double topRight, double bottomRight) throws NotFoundException {
+    public FuzzyNumber putPiShapeNumber(long valueId, double bottomLeft, double topLeft, double topRight, double bottomRight) throws NotFoundException {
         LinguisticValue value = valueRepository.findById(valueId).orElseThrow(NotFoundException::new);
-        PiShapeNumber fuzzyNumber;
-
         value = validateNumberType(value, "pi");
-
-        fuzzyNumber = Objects.isNull(value.getNumber()) ? new PiShapeNumber() : (PiShapeNumber) value.getNumber();
-
-        fuzzyNumber.setBottomLeft(bottomLeft);
-        fuzzyNumber.setBottomRight(bottomRight);
-        fuzzyNumber.setTopLeft(topLeft);
-        fuzzyNumber.setTopRight(topRight);
-
-        fuzzyNumber = fuzzyNumberRepository.save(fuzzyNumber);
-        value.setNumber(fuzzyNumber);
-        valueRepository.save(value);
-
-        return fuzzyNumber;
+        PiShapeNumber fuzzyNumber = new PiShapeNumber(value, bottomLeft, topLeft, topRight, bottomRight);
+        return putNumber(value, fuzzyNumber);
     }
 
-    public SpikeNumber putSpikeNumber(long valueId, double center, double width) throws NotFoundException {
+    public FuzzyNumber putSpikeNumber(long valueId, double center, double width) throws NotFoundException {
         LinguisticValue value = valueRepository.findById(valueId).orElseThrow(NotFoundException::new);
-        SpikeNumber fuzzyNumber;
-
         value = validateNumberType(value, "spike");
-
-        fuzzyNumber = Objects.isNull(value.getNumber()) ? new SpikeNumber() : (SpikeNumber) value.getNumber();
-
-        fuzzyNumber.setCenter(center);
-        fuzzyNumber.setWidth(width);
-
-        fuzzyNumber = fuzzyNumberRepository.save(fuzzyNumber);
-        value.setNumber(fuzzyNumber);
-        valueRepository.save(value);
-
-        return fuzzyNumber;
+        SpikeNumber fuzzyNumber = new SpikeNumber(value, center, width);
+        return putNumber(value, fuzzyNumber);
     }
 
     public LinguisticValue validateNumberType(LinguisticValue value, String type) {
         FuzzyNumber fuzzyNumber = value.getNumber();
         if (fuzzyNumber != null && !fuzzyNumber.getType().equals(type)) {
             value.setNumber(null);
-            value = valueRepository.save(value);
+            valueRepository.save(value);
             fuzzyNumberRepository.delete(fuzzyNumber);
         }
         return value;
+    }
+
+    public LinguisticValue createValue(LinguisticVariable variable, String name, float a, float b, float c) {
+        LinguisticValue linguisticValue = valueRepository.save(new LinguisticValue(name, variable));
+        FuzzyNumber fuzzyNumber = fuzzyNumberRepository.save(new TriangularNumber(linguisticValue, a, b, c));
+        linguisticValue.setNumber(fuzzyNumber);
+        return linguisticValue;
+    }
+
+    public void deleteValue(long valueId) {
+        valueRepository.deleteById(valueId);
+    }
+
+    public LinguisticValue updateValue(long valueId, String name) throws NotFoundException {
+        LinguisticValue value = valueRepository.findById(valueId).orElseThrow(NotFoundException::new);
+        value.setName(name);
+        return valueRepository.save(value);
     }
 }

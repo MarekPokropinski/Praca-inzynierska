@@ -51,7 +51,7 @@ export default function(props) {
           onClick={() => onSubmit(state.name, state.checked)}
           color="primary"
         >
-          Create
+          Save
         </Button>
         <Button variant="outlined" onClick={onClose} color="secondary">
           Cancel

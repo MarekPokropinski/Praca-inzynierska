@@ -1,10 +1,18 @@
 import React from "react";
-import { List, ListItem, ListItemText, Fab } from "@material-ui/core";
+import {
+  List,
+  ListItem,
+  ListItemText,
+  Fab,
+  ListItemSecondaryAction,
+  Button
+} from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as actionCreators from "../actions/systemsActions";
+import CreateSystemDialog from "../components/CreateSystemDialog";
 
 const styles = theme => ({
   root: { width: "100%" },
@@ -32,8 +40,40 @@ class RulesContainer extends React.Component {
     this.props.fetchSystems();
   }
 
+  handleClickDelete(id) {
+    const { fetchSystems, deleteSystem } = this.props;
+    deleteSystem(id).then(() => fetchSystems());
+  }
+
+  handleCreateSystem(name) {
+    const { createSystem, fetchSystems } = this.props;
+    createSystem(name).then(() => fetchSystems());
+  }
+
+  handleGenerateSystem(
+    name,
+    variablesNames,
+    data,
+    fuzzyNumbersPerVariable,
+    output
+  ) {
+    const { generateSystem, fetchSystems } = this.props;
+    generateSystem({
+      name,
+      variablesNames,
+      data,
+      fuzzyNumbersPerVariable,
+      output
+    }).then(() => fetchSystems());
+  }
+
   render() {
-    const { classes, systems } = this.props;
+    const {
+      classes,
+      systems,
+      displayDialog,
+      displayCreateSystemDialog
+    } = this.props;
     if (!systems) {
       return null;
     }
@@ -52,12 +92,32 @@ class RulesContainer extends React.Component {
                 primary={system.name}
                 secondary={system.id}
               />
+              <ListItemSecondaryAction>
+                <Button onClick={() => this.handleClickDelete(system.id)}>
+                  delete
+                </Button>
+              </ListItemSecondaryAction>
             </ListItem>
           ))}
         </List>
-        <Fab className={classes.fab} color="primary">
+        <Fab
+          className={classes.fab}
+          color="primary"
+          onClick={() => displayCreateSystemDialog(true)}
+        >
           <AddIcon />
         </Fab>
+        <CreateSystemDialog
+          open={displayDialog}
+          onClose={() => displayCreateSystemDialog(false)}
+          onSubmit={name => {
+            this.handleCreateSystem(name);
+            displayCreateSystemDialog(false);
+          }}
+          onLoadData={(name, labels, data, output, f) =>
+            this.handleGenerateSystem(name, labels, data, output, f)
+          }
+        />
       </div>
     );
   }

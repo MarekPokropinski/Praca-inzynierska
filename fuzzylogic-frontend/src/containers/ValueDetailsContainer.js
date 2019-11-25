@@ -6,7 +6,8 @@ import {
   Select,
   FormControl,
   InputLabel,
-  MenuItem
+  MenuItem,
+  Grid
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
@@ -16,6 +17,7 @@ import * as actionCreators from "../actions/valueActions";
 import { fetchPlot } from "../actions/variableActions";
 import Plot from "../components/VariableValuesPlot";
 import TriangularNumberForm from "../components/TriangularNumberForm";
+import CreateObjectDialog from "../components/CreateObjectDialog";
 
 const styles = theme => ({
   root: {
@@ -107,6 +109,20 @@ class ValueDetailsContainer extends React.Component {
     }
   }
 
+  async handleEditVariable(name) {
+    const {
+      value,
+      setDisplayEditValueDialog,
+      updateValue,
+      fetchPlot,
+      variable
+    } = this.props;
+    await updateValue(value.id, name);
+    await fetchPlot(variable.id);
+    setDisplayEditValueDialog(false);
+    this.refresh();
+  }
+
   render() {
     const {
       classes,
@@ -115,7 +131,9 @@ class ValueDetailsContainer extends React.Component {
       plot,
       newValue,
       setType,
-      setParams
+      setParams,
+      setDisplayEditValueDialog,
+      displayEditValueDialog
     } = this.props;
     if (!value.id) {
       return null;
@@ -143,33 +161,54 @@ class ValueDetailsContainer extends React.Component {
 
         <Plot name={variable.name} values={plot} />
 
-        <FormControl>
-          <InputLabel>type</InputLabel>
-          <Select
-            value={newValue.number.type}
-            onChange={event => setType(event.target.value)}
-          >
-            {/* <MenuItem value="none">none</MenuItem> */}
-            <MenuItem value="triangular">triangular</MenuItem>
-            <MenuItem value="trapezoidal">trapezoidal</MenuItem>
-            <MenuItem value="gaussian">gaussian</MenuItem>
-            <MenuItem value="bell">bell</MenuItem>
-            <MenuItem value="pi">pi shape</MenuItem>
-            <MenuItem value="spike">spike</MenuItem>
-          </Select>
-          <TriangularNumberForm number={number} onChange={setParams} />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={this.handleApply}
-            disabled={newValue === value || newValue.number.type === "none"}
-          >
-            Apply
-          </Button>
-          {/* <Button variant="contained" color="secondary">
+        <Grid container alignItems="center" justify="center">
+          <Grid item xs={12}>
+            <Button
+              className={classes.button}
+              variant="contained"
+              onClick={() => setDisplayEditValueDialog(true)}
+            >
+              Edit value name
+            </Button>
+          </Grid>
+          <Grid item>
+            <FormControl>
+              <InputLabel>type</InputLabel>
+              <Select
+                value={newValue.number.type}
+                onChange={event => setType(event.target.value)}
+              >
+                {/* <MenuItem value="none">none</MenuItem> */}
+                <MenuItem value="triangular">triangular</MenuItem>
+                <MenuItem value="trapezoidal">trapezoidal</MenuItem>
+                <MenuItem value="gaussian">gaussian</MenuItem>
+                <MenuItem value="bell">bell</MenuItem>
+                <MenuItem value="pi">pi shape</MenuItem>
+                <MenuItem value="spike">spike</MenuItem>
+              </Select>
+              <TriangularNumberForm number={number} onChange={setParams} />
+              <Button
+                className={classes.button}
+                variant="contained"
+                color="primary"
+                onClick={this.handleApply}
+                disabled={newValue === value || newValue.number.type === "none"}
+              >
+                Apply
+              </Button>
+              {/* <Button variant="contained" color="secondary">
             Cancel
           </Button> */}
-        </FormControl>
+            </FormControl>
+          </Grid>
+        </Grid>
+        <CreateObjectDialog
+          open={displayEditValueDialog}
+          onClose={() => setDisplayEditValueDialog(false)}
+          onSubmit={name => this.handleEditVariable(name)}
+          title="Edit linguistic value"
+          text="New value name"
+        />
       </div>
     );
   }
@@ -180,7 +219,8 @@ const mapStateToProps = state => {
     variable: state.variable.data,
     value: state.value.data,
     newValue: state.value.newValue,
-    plot: state.variable.plot
+    plot: state.variable.plot,
+    displayEditValueDialog: state.value.displayEditValueDialog
   };
 };
 

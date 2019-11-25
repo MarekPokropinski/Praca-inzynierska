@@ -11,8 +11,7 @@ public class LinguisticValue {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String name;
-    @OneToOne
-    @JoinColumn
+    @OneToOne(cascade = CascadeType.ALL,mappedBy = "linguisticValue")
     private FuzzyNumber number;
 
     @ManyToOne
@@ -33,6 +32,12 @@ public class LinguisticValue {
         this.number = number;
     }
 
+    public LinguisticValue(String name, FuzzyNumber number, LinguisticVariable linguisticVariable) {
+        this.name = name;
+        this.number = number;
+        this.linguisticVariable = linguisticVariable;
+    }
+
     public LinguisticVariable getLinguisticVariable() {
         return linguisticVariable;
     }
@@ -51,5 +56,9 @@ public class LinguisticValue {
 
     public void setNumber(FuzzyNumber number) {
         this.number = number;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

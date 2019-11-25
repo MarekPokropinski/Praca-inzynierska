@@ -35,4 +35,9 @@ public class RulesController {
         rulesService.updateRule(ruleId, fuzzyRuleDTO);
     }
 
+    @DeleteMapping("rules/{ruleId}")
+    public void deleteRule(@PathVariable long ruleId) {
+        rulesService.deleteRule(ruleId);
+    }
+
 }
