@@ -2,15 +2,12 @@ package FuzzySystems.controllers;
 
 import FuzzySystems.DTOs.EngineOutputDTO;
 import FuzzySystems.DTOs.EngineVariableDTO;
-import FuzzySystems.Exceptions.NotFoundException;
+import FuzzySystems.exceptions.NotFoundException;
 import FuzzySystems.services.FuzzyEngineService;
-import com.fuzzylite.Engine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executors;
 
 @RestController
 public class FuzzyEngineController {

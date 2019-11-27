@@ -5,7 +5,6 @@ import java.util.List;
 
 public class PlotDTO {
     private List<Float> x, y;
-    private String shape;
     private String name;
 
     public PlotDTO() {
@@ -14,11 +13,10 @@ public class PlotDTO {
         name = "";
     }
 
-    public PlotDTO(List<Float> x, List<Float> y, String name, String shape) {
+    public PlotDTO(List<Float> x, List<Float> y, String name) {
         this.x = x;
         this.y = y;
         this.name = name;
-        this.shape = shape;
     }
 
     public List<Float> getX() {
@@ -43,13 +41,5 @@ public class PlotDTO {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getShape() {
-        return shape;
-    }
-
-    public void setShape(String shape) {
-        this.shape = shape;
     }
 }

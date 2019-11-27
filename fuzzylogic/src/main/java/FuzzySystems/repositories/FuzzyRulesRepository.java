@@ -1,6 +1,6 @@
 package FuzzySystems.repositories;
 
-import FuzzySystems.FuzzySets.FuzzyRule;
+import FuzzySystems.models.FuzzyRule;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

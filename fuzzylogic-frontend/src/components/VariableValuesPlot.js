@@ -17,7 +17,7 @@ export default function VariableValuesPlot(props) {
     type: "scatter",
     mode: "lines+points",
     name: value.name,
-    line : {shape: value.shape}
+    line: { shape: "linear" }
   }));
   return (
     <Plot

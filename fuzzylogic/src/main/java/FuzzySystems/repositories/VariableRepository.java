@@ -1,6 +1,6 @@
 package FuzzySystems.repositories;
 
-import FuzzySystems.FuzzySets.LinguisticVariable;
+import FuzzySystems.models.LinguisticVariable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

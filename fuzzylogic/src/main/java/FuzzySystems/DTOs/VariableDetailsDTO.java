@@ -1,7 +1,7 @@
 package FuzzySystems.DTOs;
 
-import FuzzySystems.FuzzySets.LinguisticValue;
-import FuzzySystems.FuzzySets.LinguisticVariable;
+import FuzzySystems.models.LinguisticValue;
+import FuzzySystems.models.LinguisticVariable;
 
 import java.util.List;
 

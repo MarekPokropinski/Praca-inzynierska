@@ -1,6 +1,6 @@
 package FuzzySystems.DTOs;
 
-import FuzzySystems.FuzzySets.LinguisticValue;
+import FuzzySystems.models.LinguisticValue;
 
 public class ValueDTO {
     private String name;

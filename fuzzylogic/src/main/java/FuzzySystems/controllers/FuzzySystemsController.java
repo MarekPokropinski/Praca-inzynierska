@@ -1,9 +1,8 @@
 package FuzzySystems.controllers;
 
 import FuzzySystems.DTOs.FuzzySystemToGenerateDTO;
-import FuzzySystems.Exceptions.NotFoundException;
-import FuzzySystems.FuzzySets.FuzzyNumbers.FuzzyNumber;
-import FuzzySystems.FuzzySets.FuzzySystem;
+import FuzzySystems.exceptions.NotFoundException;
+import FuzzySystems.models.FuzzySystem;
 import FuzzySystems.services.FuzzySystemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

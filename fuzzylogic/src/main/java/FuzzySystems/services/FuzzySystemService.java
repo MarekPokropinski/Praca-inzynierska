@@ -1,11 +1,10 @@
 package FuzzySystems.services;
 
-import FuzzySystems.Exceptions.NotFoundException;
-import FuzzySystems.FuzzySets.FuzzyRule;
-import FuzzySystems.FuzzySets.FuzzySystem;
-import FuzzySystems.FuzzySets.LinguisticValue;
-import FuzzySystems.FuzzySets.LinguisticVariable;
-import FuzzySystems.repositories.FuzzyRulesRepository;
+import FuzzySystems.exceptions.NotFoundException;
+import FuzzySystems.models.FuzzyRule;
+import FuzzySystems.models.FuzzySystem;
+import FuzzySystems.models.LinguisticValue;
+import FuzzySystems.models.LinguisticVariable;
 import FuzzySystems.repositories.FuzzySystemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;

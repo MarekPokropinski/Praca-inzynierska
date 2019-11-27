@@ -1,6 +1,6 @@
-package FuzzySystems.FuzzySets.FuzzyNumbers;
+package FuzzySystems.models.FuzzyNumbers;
 
-import FuzzySystems.FuzzySets.LinguisticValue;
+import FuzzySystems.models.LinguisticValue;
 import com.fuzzylite.term.Gaussian;
 import com.fuzzylite.term.Term;
 import org.springframework.data.util.Pair;

@@ -1,6 +1,6 @@
 package FuzzySystems.DTOs;
 
-import FuzzySystems.FuzzySets.LinguisticVariable;
+import FuzzySystems.models.LinguisticVariable;
 import org.springframework.data.util.Pair;
 
 import java.util.List;

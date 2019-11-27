@@ -2,10 +2,10 @@ package FuzzySystems.controllers;
 
 import FuzzySystems.DTOs.ValueDTO;
 import FuzzySystems.DTOs.ValueToCreateDTO;
-import FuzzySystems.Exceptions.BadRequestException;
-import FuzzySystems.Exceptions.NotFoundException;
-import FuzzySystems.FuzzySets.FuzzyNumbers.FuzzyNumber;
-import FuzzySystems.FuzzySets.LinguisticValue;
+import FuzzySystems.exceptions.BadRequestException;
+import FuzzySystems.exceptions.NotFoundException;
+import FuzzySystems.models.FuzzyNumbers.FuzzyNumber;
+import FuzzySystems.models.LinguisticValue;
 import FuzzySystems.services.ValuesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

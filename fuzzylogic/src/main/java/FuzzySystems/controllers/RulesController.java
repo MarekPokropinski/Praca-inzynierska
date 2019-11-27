@@ -3,7 +3,7 @@ package FuzzySystems.controllers;
 import FuzzySystems.DTOs.FuzzyRuleDTO;
 import FuzzySystems.DTOs.FuzzyRuleDescriptionDTO;
 import FuzzySystems.DTOs.FuzzyRuleDetaisDTO;
-import FuzzySystems.Exceptions.NotFoundException;
+import FuzzySystems.exceptions.NotFoundException;
 import FuzzySystems.services.RulesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

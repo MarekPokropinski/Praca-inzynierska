@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./App.css";
 import MainContainer from "./containers/MainContainer";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 

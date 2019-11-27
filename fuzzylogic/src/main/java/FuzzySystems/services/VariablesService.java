@@ -3,10 +3,10 @@ package FuzzySystems.services;
 import FuzzySystems.DTOs.PlotDTO;
 import FuzzySystems.DTOs.VariableDTO;
 import FuzzySystems.DTOs.VariableDetailsDTO;
-import FuzzySystems.Exceptions.NotFoundException;
-import FuzzySystems.FuzzySets.FuzzySystem;
-import FuzzySystems.FuzzySets.LinguisticValue;
-import FuzzySystems.FuzzySets.LinguisticVariable;
+import FuzzySystems.exceptions.NotFoundException;
+import FuzzySystems.models.FuzzySystem;
+import FuzzySystems.models.LinguisticValue;
+import FuzzySystems.models.LinguisticVariable;
 import FuzzySystems.repositories.VariableRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -72,7 +72,7 @@ public class VariablesService {
         xs.add((float) x);
         ys.add((float) term.membership(x));
 
-        return new PlotDTO(xs, ys, linguisticValue.getName(), "linear");
+        return new PlotDTO(xs, ys, linguisticValue.getName());
     }
 
     public List<PlotDTO> getPlot(long variableId) throws NotFoundException {

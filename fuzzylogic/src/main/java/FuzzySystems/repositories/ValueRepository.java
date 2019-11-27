@@ -1,6 +1,6 @@
 package FuzzySystems.repositories;
 
-import FuzzySystems.FuzzySets.LinguisticValue;
+import FuzzySystems.models.LinguisticValue;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

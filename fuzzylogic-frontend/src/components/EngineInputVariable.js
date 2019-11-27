@@ -90,9 +90,9 @@ export default function EngineInputVariable(props) {
         />
         <div className={classes.slider}>
           <Slider
-            // defaultValue={(range.first + range.second) / 2}
             min={range.first}
             max={range.second}
+            step={0.1}
             value={typeof sliderValue === "number" ? sliderValue : 0}
             onChange={(_event, newValue) =>
               handleValueChange(
@@ -115,7 +115,7 @@ export default function EngineInputVariable(props) {
             )
           }
           inputProps={{
-            step: 1,
+            step: 0.1,
             min: range.first,
             max: range.second,
             type: "number"

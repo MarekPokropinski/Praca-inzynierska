@@ -3,7 +3,7 @@ package FuzzySystems.controllers;
 import FuzzySystems.DTOs.PlotDTO;
 import FuzzySystems.DTOs.VariableDTO;
 import FuzzySystems.DTOs.VariableDetailsDTO;
-import FuzzySystems.Exceptions.NotFoundException;
+import FuzzySystems.exceptions.NotFoundException;
 import FuzzySystems.services.VariablesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 public class VariablesController {
     @Autowired
-    VariablesService variablesService;
+    private VariablesService variablesService;
 
     @GetMapping("systems/{systemId}/variables")
     public List<VariableDTO> getVariables(@PathVariable long systemId) {
