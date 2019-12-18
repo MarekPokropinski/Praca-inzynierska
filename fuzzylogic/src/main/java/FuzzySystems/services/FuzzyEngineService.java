@@ -125,7 +125,7 @@ public class FuzzyEngineService {
         xs.add((float) x);
         ys.add((float) fuzzyOutput.membership(x));
 
-        return new PlotDTO(xs, ys, name, "linear");
+        return new PlotDTO(xs, ys, name);
     }
 
     public EngineOutputDTO process(long systemId, List<EngineVariableDTO> inputs) throws NotFoundException {

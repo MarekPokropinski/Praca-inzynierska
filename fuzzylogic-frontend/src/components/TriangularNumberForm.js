@@ -1,13 +1,5 @@
 import React from "react";
-import { InputLabel, TextField } from "@material-ui/core";
-
-// function safeParseInt(value) {
-//   const parsed = parseInt(value)
-//   if(isNaN(parsed)) {
-//     return 0;
-//   }
-//   return parsed;
-// }
+import { TextField } from "@material-ui/core";
 
 export default function TriangularNumberForm(props) {
   const { onChange, number } = props;

@@ -6,11 +6,13 @@ import Plot from "react-plotly.js";
 const useStyles = makeStyles({
   root: {
     width: "100%",
-    padding: "10px 10px"
+    padding: "10px 10px",
+    boxSizing: "border-box"
   },
   container: {
     border: "2px solid white",
-    textAlign: "center"
+    textAlign: "center",
+    width: "100%"
   },
   plot: {
     width: "100%",

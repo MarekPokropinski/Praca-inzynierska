@@ -27,15 +27,18 @@ const styles = theme => ({
     background: theme.palette.background.default,
     borderRight: "1px solid " + theme.palette.secondary.dark,
     height: "100vh",
-    maxWidth: "200px"
+    width: "200px"
   },
   tabs: {
-    height: "calc(100vh - 50px)"
+    height: "100%"
   },
   tabpanel: {
     height: "100vh",
     overflowY: "scroll",
-    width: "100%"
+    overflowX: "hidden",
+    width: "calc(100% - 10px)",
+    padding: "5px",
+    boxSizing: "border-box"
   },
   tabTitle: {
     borderBottom: "2px solid white",

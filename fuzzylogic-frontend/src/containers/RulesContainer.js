@@ -16,8 +16,8 @@ import * as actionCreators from "../actions/rulesActions";
 const styles = theme => ({
   root: { width: "100%" },
   list: {
-    width: "100%",
-    padding: "5px"
+    width: "100%"
+    // padding: "5px"
   },
   listItem: {
     border: "2px solid " + theme.palette.primary.light,

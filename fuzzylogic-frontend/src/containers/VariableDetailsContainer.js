@@ -19,7 +19,7 @@ import Plot from "../components/VariableValuesPlot";
 
 const styles = theme => ({
   root: {
-    padding: 10
+    // padding: 10
   },
   link: {
     textDecoration: "none",
@@ -34,8 +34,8 @@ const styles = theme => ({
     margin: theme.spacing(1)
   },
   list: {
-    width: "100%",
-    padding: "5px"
+    width: "100%"
+    // padding: "5px"
   },
   listItem: {
     border: "2px solid " + theme.palette.primary.light,

@@ -18,7 +18,8 @@ const styles = theme => ({
   root: { width: "100%" },
   list: {
     width: "100%",
-    padding: "5px"
+    padding: "5px",
+    boxSizing: "border-box"
   },
   listItem: {
     border: "2px solid " + theme.palette.primary.light,
@@ -35,7 +36,7 @@ const styles = theme => ({
   }
 });
 
-class RulesContainer extends React.Component {
+class SystemsContainer extends React.Component {
   componentDidMount() {
     this.props.fetchSystems();
   }
@@ -133,4 +134,4 @@ const mapDispatchToProps = dispatch =>
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(styles)(RulesContainer));
+)(withStyles(styles)(SystemsContainer));

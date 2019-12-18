@@ -21,7 +21,7 @@ import CreateObjectDialog from "../components/CreateObjectDialog";
 
 const styles = theme => ({
   root: {
-    padding: 10
+    // padding: 10
   },
   link: {
     textDecoration: "none",
